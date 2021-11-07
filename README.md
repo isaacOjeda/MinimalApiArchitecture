@@ -28,7 +28,7 @@ The easiest way to get started is using Visual Studio 2022 or with `dotnet run` 
 
 To create a new migration with `dotnet-ef` you first locate to API folder:
 ```bash
-dotnet ef migrations add -o Data/Migrations
+dotnet ef migrations add <MigrationName> -o Data/Migrations
 ```
 
 And to update de database:
