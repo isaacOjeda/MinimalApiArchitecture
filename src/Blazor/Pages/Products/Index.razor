@@ -1,0 +1,50 @@
+﻿@page "/products"
+
+@inject ApiClient.Client Client
+
+@if(_isBusy)
+{
+    <p>Cargando...</p>
+}
+else if(_products.Count == 0)
+{
+    <p>Sin datos que mostrar...</p>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var product in _products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price.ToString("c")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code{
+    bool _isBusy = true;
+
+    ICollection<ApiClient.GetProducts_Response> _products =
+        new List<ApiClient.GetProducts_Response>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _products = await Client.GetProductsAsync();
+
+        _isBusy = false;
+    }
+}
