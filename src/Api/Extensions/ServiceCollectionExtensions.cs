@@ -1,4 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using MinimalApiArchitecture.Api.Data;
+using MinimalApiArchitecture.Api.Helpers;
 
 namespace MinimalApiArchitecture.Api.Extensions;
 
@@ -22,6 +25,28 @@ public static class ServiceCollectionExtensions
             });
             c.CustomSchemaIds(x => x.FullName);
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomCors(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: AppConstants.CorsPolicy, builder =>
+            {
+                builder.AllowAnyOrigin();
+            });
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration config)
+    {
+        var connectionString = config.GetConnectionString("Default");
+
+        services.AddDbContext<ApiDbContext>(options => options.UseSqlServer(connectionString));
 
         return services;
     }
