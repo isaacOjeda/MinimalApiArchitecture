@@ -19,6 +19,7 @@ public class ApiWebApplication : WebApplicationFactory<MyApplication>
                 // Usamos una LocalDB para pruebas de integración
                 return new DbContextOptionsBuilder<ApiDbContext>()
                 .UseSqlServer(TestConnectionString)
+                .UseApplicationServiceProvider(sp)
                 .Options;
             });
         });

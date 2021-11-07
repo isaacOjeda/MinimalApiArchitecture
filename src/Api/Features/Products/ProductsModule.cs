@@ -24,6 +24,11 @@ public class ProductsModule : ICarterModule
             .ProducesValidationProblem()
             .Produces(StatusCodes.Status202Accepted)
             .Produces(StatusCodes.Status404NotFound);
+
+        app.MapDelete("api/products/{productId}", DeleteProduct)
+            .WithName("DeleteProduct")
+            .Produces(StatusCodes.Status202Accepted)
+            .ProducesProblem(StatusCodes.Status404NotFound);
     }
 
     Task<List<GetProducts.Response>> GetProductsAsync(IMediator mediator) =>
@@ -52,4 +57,11 @@ public class ProductsModule : ICarterModule
 
         return await mediator.Send(command);
     }
+
+    Task<IResult> DeleteProduct(int productId, IMediator mediator) =>
+        mediator.Send(new DeleteProduct.Command()
+        {
+            ProductId = productId
+        });
+
 }

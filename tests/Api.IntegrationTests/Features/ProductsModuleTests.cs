@@ -37,7 +37,7 @@ public class ProductsModuleTests : TestBase
         var products = await client.GetFromJsonAsync<List<GetProducts.Response>>("/api/products");
 
         // Assert
-        products.Should().NotBeEmpty();
+        products.Should().NotBeNullOrEmpty();
         products.Count.Should().Be(2);
     }
 
