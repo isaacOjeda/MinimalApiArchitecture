@@ -4,6 +4,7 @@ using MinimalApiArchitecture.Api.Features.Products.Commands;
 using MinimalApiArchitecture.Api.Features.Products.Queries;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -17,10 +18,13 @@ public class ProductsModuleTests : TestBase
     [Test]
     public async Task GetProducts_Empty()
     {
+        // Arrenge
         var client = Application.CreateClient();
 
+        // Act
         var products = await client.GetFromJsonAsync<List<GetProducts.Response>>("/api/products");
 
+        // Assert
         products.Should().BeEmpty();
     }
 
@@ -44,8 +48,10 @@ public class ProductsModuleTests : TestBase
     [Test]
     public async Task CreateProduct()
     {
+        // Arrenge
         var client = Application.CreateClient();
 
+        // Act
         var response = await client.PostAsJsonAsync("api/products", new CreateProduct.Command
         {
             Description = $"Test product description",
@@ -53,6 +59,7 @@ public class ProductsModuleTests : TestBase
             Price = 123456
         });
 
+        // Assert
         response.EnsureSuccessStatusCode();
     }
 
@@ -85,5 +92,39 @@ public class ProductsModuleTests : TestBase
         updated.Name.Should().Be("Updated name for ID 1");
         updated.Description.Should().Be("Updated Desc for ID 1");
         updated.Price.Should().Be(999);
+    }
+
+    [Test]
+    public async Task DeleteProduct()
+    {
+        // Arrenge
+        var product1 = new Product(0, "Test 01", "Desc 01", 1);
+        await AddAsync(product1);
+
+        var client = Application.CreateClient();
+
+        // Act
+        var response = await client.DeleteAsync($"api/products/{product1.ProductId}");
+
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var deleted = await FindAsync<Product>(product1.ProductId);
+
+        deleted.Should().BeNull();
+    }
+
+    [Test]
+    public async Task DeleteProduct_Should_Fail()
+    {
+        // Arrenge
+        var client = Application.CreateClient();
+
+        // Act
+        var response = await client.DeleteAsync($"api/products/0");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 }
