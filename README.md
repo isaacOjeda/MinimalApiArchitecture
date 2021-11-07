@@ -4,7 +4,7 @@ This project is an experiment trying to create a solution template with Minimal 
 
 
 
-## Techonogies and patterns used
+## Technologies and patterns used
 
 - API
   - Minimal API with .NET 6 and Carter
