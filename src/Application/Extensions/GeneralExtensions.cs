@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace MinimalApiArchitecture.Api.Extensions;
+namespace MinimalApiArchitecture.Application.Extensions;
 
 public static class GeneralExtensions
 {

@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
-using MinimalApiArchitecture.Api.Data;
+using Microsoft.AspNetCore.Http;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
-namespace MinimalApiArchitecture.Api.Features.Products.Commands;
+namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
 public class UpdateProduct
 {

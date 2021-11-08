@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using MinimalApiArchitecture.Api.Data;
-using MinimalApiArchitecture.Api.Helpers;
+using MinimalApiArchitecture.Application.Helpers;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Api.Extensions;
 

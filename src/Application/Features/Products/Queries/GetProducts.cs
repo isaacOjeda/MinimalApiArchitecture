@@ -2,10 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MinimalApiArchitecture.Api.Data;
-using MinimalApiArchitecture.Api.Entities;
+using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
-namespace MinimalApiArchitecture.Api.Features.Products.Queries;
+namespace MinimalApiArchitecture.Application.Features.Products.Queries;
 
 public class GetProducts
 {

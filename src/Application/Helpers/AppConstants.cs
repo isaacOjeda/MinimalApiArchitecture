@@ -1,4 +1,4 @@
-﻿namespace MinimalApiArchitecture.Api.Helpers
+﻿namespace MinimalApiArchitecture.Application.Helpers
 {
     public class AppConstants
     {

@@ -1,11 +1,14 @@
 ﻿using Carter;
 using Carter.ModelBinding;
 using MediatR;
-using MinimalApiArchitecture.Api.Extensions;
-using MinimalApiArchitecture.Api.Features.Products.Commands;
-using MinimalApiArchitecture.Api.Features.Products.Queries;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using MinimalApiArchitecture.Application.Extensions;
+using MinimalApiArchitecture.Application.Features.Products.Commands;
+using MinimalApiArchitecture.Application.Features.Products.Queries;
 
-namespace MinimalApiArchitecture.Api.Features.Products;
+namespace MinimalApiArchitecture.Application.Features.Products;
 
 public class ProductsModule : ICarterModule
 {

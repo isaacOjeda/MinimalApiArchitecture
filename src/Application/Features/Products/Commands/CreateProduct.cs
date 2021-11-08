@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using MinimalApiArchitecture.Api.Data;
-using MinimalApiArchitecture.Api.Entities;
+using Microsoft.AspNetCore.Http;
+using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
-namespace MinimalApiArchitecture.Api.Features.Products.Commands;
+namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
 public class CreateProduct
 {
@@ -35,7 +36,7 @@ public class CreateProduct
 
         public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
         {
-            var newProduct = new Product(0, request.Name, request.Description, request.Price);
+            var newProduct = new Product(0, request.Name, request.Description, request.Price, 0);
 
             _context.Products.Add(newProduct);
 

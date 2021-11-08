@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MinimalApiArchitecture.Api.Data;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
-namespace MinimalApiArchitecture.Api.Features.Products.Commands;
+namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
 public class DeleteProduct
 {

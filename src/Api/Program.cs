@@ -1,7 +1,7 @@
 using Carter;
 using MediatR;
 using MinimalApiArchitecture.Api.Extensions;
-using MinimalApiArchitecture.Api.Helpers;
+using MinimalApiArchitecture.Application.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
