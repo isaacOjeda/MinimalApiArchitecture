@@ -35,7 +35,7 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migratio
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("MinimalApiArchitecture.Application.Entities.Product", b =>

@@ -16,7 +16,7 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migratio
                 defaultValue: 0);
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false)
@@ -25,7 +25,7 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migratio
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.CategoryId);
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateIndex(
@@ -34,10 +34,10 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migratio
                 column: "CategoryId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Products_Category_CategoryId",
+                name: "FK_Products_Categories_CategoryId",
                 table: "Products",
                 column: "CategoryId",
-                principalTable: "Category",
+                principalTable: "Categories",
                 principalColumn: "CategoryId",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -45,11 +45,11 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migratio
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Products_Category_CategoryId",
+                name: "FK_Products_Categories_CategoryId",
                 table: "Products");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
 
             migrationBuilder.DropIndex(
                 name: "IX_Products_CategoryId",

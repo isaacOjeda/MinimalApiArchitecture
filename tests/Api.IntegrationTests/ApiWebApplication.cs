@@ -8,7 +8,7 @@ namespace MinimalApiArchitecture.Api.IntegrationTests;
 
 public class ApiWebApplication : WebApplicationFactory<Api>
 {
-    public const string TestConnectionString = "Server=(localdb)\\mssqllocaldb;Database=ApiAngularFromZero_TestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+    public const string TestConnectionString = "Server=(localdb)\\mssqllocaldb;Database=MinimalApiArchitecture_TestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 
     protected override IHost CreateHost(IHostBuilder builder)
     {

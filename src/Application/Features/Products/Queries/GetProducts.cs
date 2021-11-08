@@ -16,7 +16,11 @@ public class GetProducts
 
     public class MappingProfile : Profile
     {
-        public MappingProfile() => CreateMap<Product, Response>();
+        public MappingProfile() => CreateMap<Product, Response>()
+            .ForMember(
+                d => d.CategoryName,
+                opt => opt.MapFrom(mf => mf.Category != null ? mf.Category.Name : string.Empty)
+            );
     }
 
     public class Handler : IRequestHandler<Query, List<Response>>
@@ -36,5 +40,5 @@ public class GetProducts
                 .ToListAsync();
     }
 
-    public record Response(int ProductId, string Name, string Description, double Price);
+    public record Response(int ProductId, string Name, string Description, double Price, string CategoryName);
 }

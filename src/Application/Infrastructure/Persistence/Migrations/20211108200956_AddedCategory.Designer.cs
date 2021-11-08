@@ -11,7 +11,7 @@ using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211108195203_AddedCategory")]
+    [Migration("20211108200956_AddedCategory")]
     partial class AddedCategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migratio
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("MinimalApiArchitecture.Application.Entities.Product", b =>
