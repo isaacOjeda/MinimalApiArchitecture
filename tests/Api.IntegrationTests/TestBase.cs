@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MinimalApiArchitecture.Api.Data;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using NUnit.Framework;
 using Respawn;
 using System.Threading.Tasks;

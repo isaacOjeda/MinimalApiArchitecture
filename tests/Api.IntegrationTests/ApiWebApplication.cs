@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MinimalApiArchitecture.Api.Data;
+using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Api.IntegrationTests;
 
-public class ApiWebApplication : WebApplicationFactory<MyApplication>
+public class ApiWebApplication : WebApplicationFactory<Api>
 {
     public const string TestConnectionString = "Server=(localdb)\\mssqllocaldb;Database=ApiAngularFromZero_TestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 

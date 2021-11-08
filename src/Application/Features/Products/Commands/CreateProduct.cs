@@ -13,6 +13,7 @@ public class CreateProduct
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public double Price { get; set; }
+        public int CategoryId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -36,7 +37,7 @@ public class CreateProduct
 
         public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
         {
-            var newProduct = new Product(0, request.Name, request.Description, request.Price, 0);
+            var newProduct = new Product(0, request.Name, request.Description, request.Price, request.CategoryId);
 
             _context.Products.Add(newProduct);
 
