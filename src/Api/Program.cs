@@ -19,4 +19,3 @@ app.UseCors(AppConstants.CorsPolicy);
 app.MapSwagger();
 app.MapCarter();
 app.Run();
-
