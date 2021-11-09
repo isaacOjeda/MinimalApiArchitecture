@@ -1,12 +1,28 @@
-﻿using MediatR;
+﻿using Carter;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class DeleteProduct
+public class DeleteProduct : ICarterModule
 {
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapDelete("api/products/{productId}", (int productId, IMediator mediator) =>
+            mediator.Send(new Command()
+            {
+                ProductId = productId
+            }))
+        .WithName("DeleteProduct")
+        .WithTags("Products")
+        .Produces(StatusCodes.Status202Accepted)
+        .ProducesProblem(StatusCodes.Status404NotFound);
+    }
+
     public class Command : IRequest<IResult>
     {
         [FromRoute]

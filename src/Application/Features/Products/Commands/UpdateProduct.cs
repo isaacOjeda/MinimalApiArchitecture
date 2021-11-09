@@ -1,12 +1,37 @@
-﻿using FluentValidation;
+﻿using Carter;
+using Carter.ModelBinding;
+using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using MinimalApiArchitecture.Application.Extensions;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class UpdateProduct
+public class UpdateProduct : ICarterModule
 {
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPut("api/products", async (Command command, IMediator mediator, HttpRequest request) =>
+        {
+            var result = request.Validate(command);
+
+            if (!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToValidationProblems());
+            }
+
+            return await mediator.Send(command);
+        })
+        .WithName("UpdateProduct")
+        .WithTags("Products")
+        .ProducesValidationProblem()
+        .Produces(StatusCodes.Status202Accepted)
+        .Produces(StatusCodes.Status404NotFound);
+    }
+
     public class Command : IRequest<IResult>
     {
         public int ProductId { get; set; }

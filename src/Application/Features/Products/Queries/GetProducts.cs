@@ -1,14 +1,25 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Carter;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Queries;
 
-public class GetProducts
+public class GetProducts : ICarterModule
 {
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapGet("api/products", (IMediator mediator) => mediator.Send(new Query()))
+            .WithName("GetProducts")
+            .WithTags("Products");
+    }
+
     public class Query : IRequest<List<Response>>
     {
 
