@@ -15,7 +15,7 @@ public class GetCategories : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/categories", (IMediator mediator) => mediator.Send(new Query()))
+        app.MapGet("api/categories", async (IMediator mediator) => await mediator.Send(new Query()))
             .WithName("GetCategories")
             .WithTags("Categories");
     }
