@@ -2,6 +2,11 @@
 
 @inject ApiClient.Client Client
 
+
+<NavLink class="btn btn-primary mb-2" href="/products/create">
+    New product
+</NavLink>
+
 @if(_isBusy)
 {
     <p>Cargando...</p>
@@ -18,7 +23,7 @@ else
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Price</th>
+                <th>Price ($)</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +32,7 @@ else
                 <tr>
                     <td>@product.Name</td>
                     <td>@product.Description</td>
-                    <td>@product.Price.ToString("c")</td>
+                    <td>@product.Price.ToString("N2")</td>
                 </tr>
             }
         </tbody>

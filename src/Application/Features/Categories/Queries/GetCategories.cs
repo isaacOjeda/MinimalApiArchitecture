@@ -9,29 +9,20 @@ using Microsoft.EntityFrameworkCore;
 using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
-namespace MinimalApiArchitecture.Application.Features.Products.Queries;
+namespace MinimalApiArchitecture.Application.Features.Categories.Queries;
 
-public class GetProducts : ICarterModule
+public class GetCategories : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/products", (IMediator mediator) => mediator.Send(new Query()))
-            .WithName("GetProducts")
-            .WithTags("Products");
+        app.MapGet("api/categories", (IMediator mediator) => mediator.Send(new Query()))
+            .WithName("GetCategories")
+            .WithTags("Categories");
     }
 
     public class Query : IRequest<List<Response>>
     {
 
-    }
-
-    public class MappingProfile : Profile
-    {
-        public MappingProfile() => CreateMap<Product, Response>()
-            .ForMember(
-                d => d.CategoryName,
-                opt => opt.MapFrom(mf => mf.Category != null ? mf.Category.Name : string.Empty)
-            );
     }
 
     public class Handler : IRequestHandler<Query, List<Response>>
@@ -44,12 +35,18 @@ public class GetProducts : ICarterModule
             _context = context;
             _configuration = configuration;
         }
-
         public Task<List<Response>> Handle(Query request, CancellationToken cancellationToken) =>
-            _context.Products
-                .ProjectTo<Response>(_configuration)
-                .ToListAsync();
+            _context.Categories.ProjectTo<Response>(_configuration).ToListAsync();
     }
 
-    public record Response(int ProductId, string Name, string Description, double Price, string CategoryName);
+    public class Response
+    {
+        public int CategoryId { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public class MappingProfile : Profile
+    {
+        public MappingProfile() => CreateMap<Category, Response>();
+    }
 }
