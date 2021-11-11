@@ -6,7 +6,6 @@ using MinimalApiArchitecture.Application.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddCustomCors();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddSwagger();

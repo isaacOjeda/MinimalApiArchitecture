@@ -1,4 +1,5 @@
 ﻿namespace MinimalApiArchitecture.Application.Entities;
+
 public class Product
 {
     public Product(int productId, string name, string description, double price, int categoryId)

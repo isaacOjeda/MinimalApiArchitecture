@@ -22,7 +22,6 @@ public class GetCategories : ICarterModule
 
     public class Query : IRequest<List<Response>>
     {
-
     }
 
     public class Handler : IRequestHandler<Query, List<Response>>
@@ -35,6 +34,7 @@ public class GetCategories : ICarterModule
             _context = context;
             _configuration = configuration;
         }
+
         public Task<List<Response>> Handle(Query request, CancellationToken cancellationToken) =>
             _context.Categories.ProjectTo<Response>(_configuration).ToListAsync();
     }

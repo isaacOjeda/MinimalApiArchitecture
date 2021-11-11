@@ -22,7 +22,6 @@ public class GetProducts : ICarterModule
 
     public class Query : IRequest<List<Response>>
     {
-
     }
 
     public class MappingProfile : Profile

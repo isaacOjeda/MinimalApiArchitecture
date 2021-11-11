@@ -1,7 +1,7 @@
-﻿
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
+
 namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Migrations
 {
     public partial class FirstMigration : Migration

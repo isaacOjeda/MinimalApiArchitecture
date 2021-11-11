@@ -27,7 +27,6 @@ public class DeleteProduct : ICarterModule
     {
         [FromRoute]
         public int ProductId { get; set; }
-
     }
 
     public class Handler : IRequestHandler<Command, IResult>
