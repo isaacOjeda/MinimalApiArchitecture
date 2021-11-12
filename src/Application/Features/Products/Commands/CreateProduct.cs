@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Entities;
-using MinimalApiArchitecture.Application.Extensions;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
@@ -21,7 +20,7 @@ public class CreateProduct : ICarterModule
 
             if (!result.IsValid)
             {
-                return Results.ValidationProblem(result.ToValidationProblems());
+                return Results.ValidationProblem(result.GetValidationProblems());
             }
 
             return await mediator.Send(command);
