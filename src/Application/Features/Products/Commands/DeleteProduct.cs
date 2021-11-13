@@ -1,35 +1,20 @@
-﻿using Carter;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
+using MinimalApis.Extensions.Results;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class DeleteProduct : ICarterModule
+public class DeleteProduct
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
-    {
-        app.MapDelete("api/products/{productId}", (int productId, IMediator mediator) =>
-            mediator.Send(new Command()
-            {
-                ProductId = productId
-            }))
-        .WithName("DeleteProduct")
-        .WithTags("Products")
-        .Produces(StatusCodes.Status202Accepted)
-        .ProducesProblem(StatusCodes.Status404NotFound);
-    }
-
-    public class Command : IRequest<IResult>
+    public class Command : IRequest<Results<NotFound, Ok>>
     {
         [FromRoute]
         public int ProductId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, IResult>
+    public class Handler : IRequestHandler<Command, Results<NotFound, Ok>>
     {
         private readonly ApiDbContext _context;
 
@@ -38,19 +23,19 @@ public class DeleteProduct : ICarterModule
             _context = context;
         }
 
-        public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Results<NotFound, Ok>> Handle(Command request, CancellationToken cancellationToken)
         {
             var product = await _context.Products.FindAsync(request.ProductId);
 
             if (product is null)
             {
-                return Results.Problem(statusCode: StatusCodes.Status404NotFound);
+                return Results.Extensions.NotFound();
             }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
-            return Results.Accepted();
+            return Results.Extensions.Ok();
         }
     }
 }

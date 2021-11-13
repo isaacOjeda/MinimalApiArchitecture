@@ -1,37 +1,14 @@
-﻿using Carter;
-using Carter.ModelBinding;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
+using MinimalApis.Extensions.Results;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class UpdateProduct : ICarterModule
+public class UpdateProduct
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
-    {
-        app.MapPut("api/products", async (Command command, IMediator mediator, HttpRequest request) =>
-        {
-            var result = request.Validate(command);
-
-            if (!result.IsValid)
-            {
-                return Results.ValidationProblem(result.GetValidationProblems());
-            }
-
-            return await mediator.Send(command);
-        })
-        .WithName("UpdateProduct")
-        .WithTags("Products")
-        .ProducesValidationProblem()
-        .Produces(StatusCodes.Status202Accepted)
-        .Produces(StatusCodes.Status404NotFound);
-    }
-
-    public class Command : IRequest<IResult>
+    public class Command : IRequest<Results<NotFound, Ok>>
     {
         public int ProductId { get; set; }
         public string? Name { get; set; }
@@ -50,7 +27,7 @@ public class UpdateProduct : ICarterModule
         }
     }
 
-    public class Handler : IRequestHandler<Command, IResult>
+    public class Handler : IRequestHandler<Command, Results<NotFound, Ok>>
     {
         private readonly ApiDbContext _context;
 
@@ -59,13 +36,13 @@ public class UpdateProduct : ICarterModule
             _context = context;
         }
 
-        public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Results<NotFound, Ok>> Handle(Command request, CancellationToken cancellationToken)
         {
             var product = await _context.Products.FindAsync(request.ProductId);
 
             if (product is null)
             {
-                return Results.NotFound();
+                return Results.Extensions.NotFound();
             }
 
             product.Name = request.Name!;
@@ -74,7 +51,7 @@ public class UpdateProduct : ICarterModule
 
             await _context.SaveChangesAsync();
 
-            return Results.Accepted();
+            return Results.Extensions.Ok();
         }
     }
 }

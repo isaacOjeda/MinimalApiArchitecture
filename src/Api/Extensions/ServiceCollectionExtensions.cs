@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using MinimalApiArchitecture.Application.Helpers;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
+using System.Reflection;
 
 namespace MinimalApiArchitecture.Api.Extensions;
 
@@ -9,7 +10,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
-        services.AddEndpointsApiExplorer();
+        services.AddEndpointsProvidesMetadataApiExplorer();
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo()
@@ -24,6 +25,10 @@ public static class ServiceCollectionExtensions
                 }
             });
             c.CustomSchemaIds(x => x.FullName);
+            c.CustomOperationIds(api =>
+                api.ActionDescriptor.AttributeRouteInfo?.Name
+                    ?? api.ActionDescriptor.EndpointMetadata.OfType<IEndpointNameMetadata>().FirstOrDefault()?.EndpointName
+                        ?? api.ActionDescriptor.EndpointMetadata.OfType<MethodInfo>().FirstOrDefault()?.Name);
         });
 
         return services;

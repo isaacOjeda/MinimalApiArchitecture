@@ -1,37 +1,16 @@
-﻿using Carter;
-using Carter.ModelBinding;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
+using MinimalApis.Extensions.Results;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class CreateProduct : ICarterModule
+public class CreateProduct
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
-    {
-        app.MapPost("api/products", async (Command command, IMediator mediator, HttpRequest req) =>
-        {
-            var result = req.Validate(command);
 
-            if (!result.IsValid)
-            {
-                return Results.ValidationProblem(result.GetValidationProblems());
-            }
-
-            return await mediator.Send(command);
-        })
-        .WithName("CreateProduct")
-        .WithTags("Products")
-        .ProducesValidationProblem()
-        .Produces(StatusCodes.Status202Accepted);
-    }
-
-    public class Command : IRequest<IResult>
+    public class Command : IRequest<Created>
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -49,7 +28,7 @@ public class CreateProduct : ICarterModule
         }
     }
 
-    public class Handler : IRequestHandler<Command, IResult>
+    public class Handler : IRequestHandler<Command, Created>
     {
         private readonly ApiDbContext _context;
 
@@ -58,7 +37,7 @@ public class CreateProduct : ICarterModule
             _context = context;
         }
 
-        public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Created> Handle(Command request, CancellationToken cancellationToken)
         {
             var newProduct = new Product(0, request.Name, request.Description, request.Price, request.CategoryId);
 
@@ -66,7 +45,7 @@ public class CreateProduct : ICarterModule
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Results.Accepted();
+            return Results.Extensions.Created($"api/products/{newProduct.ProductId}", newProduct);
         }
     }
 }
