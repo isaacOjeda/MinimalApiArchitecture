@@ -39,7 +39,7 @@ public class TestBase
 
     }
 
-    protected async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
+    protected async Task<TEntity> AddAsync<TEntity>(TEntity entity) where TEntity : class
     {
         using var scope = Application.Services.CreateScope();
 
@@ -48,6 +48,8 @@ public class TestBase
         context.Add(entity);
 
         await context.SaveChangesAsync();
+
+        return entity;
     }
 
     protected async Task<TEntity> FindAsync<TEntity>(params object[] keyValues) where TEntity : class

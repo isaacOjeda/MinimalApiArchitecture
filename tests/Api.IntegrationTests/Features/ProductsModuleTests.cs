@@ -13,27 +13,11 @@ namespace MinimalApiArchitecture.Api.IntegrationTests.Features;
 
 public class ProductsModuleTests : TestBase
 {
-
-
-    [Test]
-    public async Task GetProducts_Empty()
-    {
-        // Arrenge
-        var client = Application.CreateClient();
-
-        // Act
-        var products = await client.GetFromJsonAsync<List<GetProducts.Response>>("/api/products");
-
-        // Assert
-        products.Should().BeEmpty();
-    }
-
     [Test]
     public async Task GetProducts()
     {
         // Arrenge
-        var testCategory = new Category(0, "Category Test");
-        await AddAsync(testCategory);
+        var testCategory = await AddAsync(new Category(0, "Category Test"));
         await AddAsync(new Product(0, "Test 01", "Desc 01", 1, testCategory.CategoryId));
         await AddAsync(new Product(0, "Test 02", "Desc 02", 2, testCategory.CategoryId));
 
@@ -51,8 +35,7 @@ public class ProductsModuleTests : TestBase
     public async Task CreateProduct()
     {
         // Arrenge
-        var testCategory = new Category(0, "Category Test");
-        await AddAsync(testCategory);
+        var testCategory = await AddAsync(new Category(0, "Category Test"));
 
         var client = Application.CreateClient();
 
@@ -73,13 +56,9 @@ public class ProductsModuleTests : TestBase
     public async Task UpdateProduct()
     {
         // Arrenge
-        var testCategory = new Category(0, "Category Test");
-        await AddAsync(testCategory);
-        var product1 = new Product(0, "Test 01", "Desc 01", 1, testCategory.CategoryId);
-        var product2 = new Product(0, "Test 02", "Desc 02", 2, testCategory.CategoryId);
-
-        await AddAsync(product1);
-        await AddAsync(product2);
+        var testCategory = await AddAsync(new Category(0, "Category Test"));
+        var product1 = await AddAsync(new Product(0, "Test 01", "Desc 01", 1, testCategory.CategoryId));
+        await AddAsync(new Product(0, "Test 02", "Desc 02", 2, testCategory.CategoryId));
 
         var client = Application.CreateClient();
 
@@ -106,10 +85,8 @@ public class ProductsModuleTests : TestBase
     public async Task DeleteProduct()
     {
         // Arrenge
-        var testCategory = new Category(0, "Category Test");
-        await AddAsync(testCategory);
-        var product1 = new Product(0, "Test 01", "Desc 01", 1, testCategory.CategoryId);
-        await AddAsync(product1);
+        var testCategory = await AddAsync(new Category(0, "Category Test"));
+        var product1 = await AddAsync(new Product(0, "Test 01", "Desc 01", 1, testCategory.CategoryId));
 
         var client = Application.CreateClient();
 
