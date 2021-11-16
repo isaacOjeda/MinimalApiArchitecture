@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using Carter.ModelBinding;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
@@ -9,8 +9,28 @@ namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
 public class CreateProduct
 {
+    public static async Task<Results<ValidationProblem, Created>> Handler(
+        Command command,
+        HttpRequest req,
+        ApiDbContext context)
+    {
+        var result = req.Validate(command);
 
-    public class Command : IRequest<Created>
+        if (!result.IsValid)
+        {
+            return Results.Extensions.ValidationProblem(result.GetValidationProblems());
+        }
+
+        var newProduct = new Product(0, command.Name, command.Description, command.Price, command.CategoryId);
+
+        context.Products.Add(newProduct);
+
+        await context.SaveChangesAsync();
+
+        return Results.Extensions.Created($"api/products/{newProduct.ProductId}", newProduct);
+    }
+
+    public class Command
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -25,27 +45,6 @@ public class CreateProduct
             RuleFor(r => r.Name).NotEmpty();
             RuleFor(r => r.Description).NotEmpty();
             RuleFor(r => r.Price).NotEmpty();
-        }
-    }
-
-    public class Handler : IRequestHandler<Command, Created>
-    {
-        private readonly ApiDbContext _context;
-
-        public Handler(ApiDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<Created> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var newProduct = new Product(0, request.Name, request.Description, request.Price, request.CategoryId);
-
-            _context.Products.Add(newProduct);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Results.Extensions.Created($"api/products/{newProduct.ProductId}", newProduct);
         }
     }
 }

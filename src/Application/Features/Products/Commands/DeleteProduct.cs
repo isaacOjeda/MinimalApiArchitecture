@@ -1,6 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using MinimalApis.Extensions.Results;
 
@@ -8,34 +6,18 @@ namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
 public class DeleteProduct
 {
-    public class Command : IRequest<Results<NotFound, Ok>>
+    public static async Task<Results<NotFound, Ok>> Handler(int productId, ApiDbContext context)
     {
-        [FromRoute]
-        public int ProductId { get; set; }
-    }
+        var product = await context.Products.FindAsync(productId);
 
-    public class Handler : IRequestHandler<Command, Results<NotFound, Ok>>
-    {
-        private readonly ApiDbContext _context;
-
-        public Handler(ApiDbContext context)
+        if (product is null)
         {
-            _context = context;
+            return Results.Extensions.NotFound();
         }
 
-        public async Task<Results<NotFound, Ok>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var product = await _context.Products.FindAsync(request.ProductId);
+        context.Products.Remove(product);
+        await context.SaveChangesAsync();
 
-            if (product is null)
-            {
-                return Results.Extensions.NotFound();
-            }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return Results.Extensions.Ok();
-        }
+        return Results.Extensions.Ok();
     }
 }

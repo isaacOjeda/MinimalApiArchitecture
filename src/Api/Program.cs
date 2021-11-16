@@ -1,5 +1,4 @@
 using Carter;
-using MediatR;
 using MinimalApiArchitecture.Api.Extensions;
 using MinimalApiArchitecture.Application;
 using MinimalApiArchitecture.Application.Helpers;
@@ -11,7 +10,6 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddSwagger();
 builder.Services.AddCarter();
 builder.Services.AddAutoMapper(typeof(Application));
-builder.Services.AddMediatR(typeof(Application));
 
 var app = builder.Build();
 

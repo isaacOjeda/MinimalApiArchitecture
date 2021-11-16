@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using Carter.ModelBinding;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using MinimalApis.Extensions.Results;
@@ -8,7 +8,35 @@ namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
 public class UpdateProduct
 {
-    public class Command : IRequest<Results<NotFound, Ok>>
+    public static async Task<Results<NotFound, Ok, ValidationProblem>> Handler(
+        Command command,
+        ApiDbContext context,
+        HttpRequest request)
+    {
+        var result = request.Validate(command);
+
+        if (!result.IsValid)
+        {
+            return Results.Extensions.ValidationProblem(result.GetValidationProblems());
+        }
+
+        var product = await context.Products.FindAsync(command.ProductId);
+
+        if (product is null)
+        {
+            return Results.Extensions.NotFound();
+        }
+
+        product.Name = command.Name!;
+        product.Description = command.Description!;
+        product.Price = command.Price;
+
+        await context.SaveChangesAsync();
+
+        return Results.Extensions.Ok();
+    }
+
+    public class Command
     {
         public int ProductId { get; set; }
         public string? Name { get; set; }
@@ -24,34 +52,6 @@ public class UpdateProduct
             RuleFor(r => r.Name).NotEmpty();
             RuleFor(r => r.Description).NotEmpty();
             RuleFor(r => r.Price).NotEmpty();
-        }
-    }
-
-    public class Handler : IRequestHandler<Command, Results<NotFound, Ok>>
-    {
-        private readonly ApiDbContext _context;
-
-        public Handler(ApiDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<Results<NotFound, Ok>> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var product = await _context.Products.FindAsync(request.ProductId);
-
-            if (product is null)
-            {
-                return Results.Extensions.NotFound();
-            }
-
-            product.Name = request.Name!;
-            product.Description = request.Description!;
-            product.Price = request.Price;
-
-            await _context.SaveChangesAsync();
-
-            return Results.Extensions.Ok();
         }
     }
 }

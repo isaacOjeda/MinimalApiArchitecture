@@ -4,7 +4,6 @@ using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Features.Products.Queries;
 using NUnit.Framework;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Unit.Tests.Products;
@@ -27,14 +26,12 @@ public class GetProductsQueryTests : TestBase
     {
         // Arrenge
 
-        var query = new GetProducts.Query();
-        var handler = new GetProducts.Handler(Context, _configurationProvider!);
 
         // Act
-        var response = await handler.Handle(query, CancellationToken.None);
+        var response = await GetProducts.Handler(Context, _configurationProvider!);
 
         // Assert
-        response.Should().BeEmpty();
+        response.Result.Should().BeEmpty();
     }
 
 
@@ -42,18 +39,15 @@ public class GetProductsQueryTests : TestBase
     public async Task GetProductsTest()
     {
         // Arrenge
-        var query = new GetProducts.Query();
-        var handler = new GetProducts.Handler(Context, _configurationProvider!);
-
         var category = await AddAsync(new Category(0, "Category 01"));
         await AddAsync(new Product(0, "name 1", "description 1", 999, category.CategoryId));
 
 
         // Act
-        var response = await handler.Handle(query, CancellationToken.None);
+        var response = await GetProducts.Handler(Context, _configurationProvider!);
 
         // Assert
-        response.Should().NotBeEmpty();
-        response.First().CategoryName.Should().Be(category.Name);
+        response.Result.Should().NotBeEmpty();
+        response.Result.First().CategoryName.Should().Be(category.Name);
     }
 }
