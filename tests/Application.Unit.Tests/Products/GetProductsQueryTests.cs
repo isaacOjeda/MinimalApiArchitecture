@@ -25,10 +25,10 @@ public class GetProductsQueryTests : TestBase
     public async Task GetProductsTest_Empty()
     {
         // Arrenge
-
+        var query = new GetProducts();
 
         // Act
-        var response = await GetProducts.Handler(Context, _configurationProvider!);
+        var response = await query.Handler(Context, _configurationProvider!);
 
         // Assert
         response.Result.Should().BeEmpty();
@@ -39,12 +39,13 @@ public class GetProductsQueryTests : TestBase
     public async Task GetProductsTest()
     {
         // Arrenge
+        var query = new GetProducts();
         var category = await AddAsync(new Category(0, "Category 01"));
         await AddAsync(new Product(0, "name 1", "description 1", 999, category.CategoryId));
 
 
         // Act
-        var response = await GetProducts.Handler(Context, _configurationProvider!);
+        var response = await query.Handler(Context, _configurationProvider!);
 
         // Assert
         response.Result.Should().NotBeEmpty();
