@@ -1,14 +1,25 @@
-﻿using Carter.ModelBinding;
+﻿using Carter;
+using Carter.ModelBinding;
 using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using MinimalApis.Extensions.Results;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class UpdateProduct
+public class UpdateProduct : ICarterModule
 {
-    public static async Task<Results<NotFound, Ok, ValidationProblem>> Handler(
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPut("api/products", Handler)
+            .WithName(nameof(UpdateProduct))
+            .WithTags(nameof(Product));
+    }
+
+    public async Task<Results<NotFound, Ok, ValidationProblem>> Handler(
         Command command,
         ApiDbContext context,
         HttpRequest request)

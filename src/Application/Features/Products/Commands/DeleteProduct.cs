@@ -1,12 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Carter;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using MinimalApis.Extensions.Results;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class DeleteProduct
+public class DeleteProduct : ICarterModule
 {
-    public static async Task<Results<NotFound, Ok>> Handler(int productId, ApiDbContext context)
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapDelete("api/products/{productId}", Handler)
+            .WithName(nameof(DeleteProduct))
+            .WithTags(nameof(Product));
+    }
+
+    public async Task<Results<NotFound, Ok>> Handler(int productId, ApiDbContext context)
     {
         var product = await context.Products.FindAsync(productId);
 

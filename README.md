@@ -7,7 +7,7 @@ This project is an experiment trying to create a solution template with Minimal 
 - API
   - [Minimal API with .NET 6](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0) and [Carter](https://github.com/CarterCommunity/Carter)
   - [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/)
-  - CQRS with [MediatR](https://github.com/jbogard/MediatR)
+  - CQRS
   - [FluentValidation](https://fluentvalidation.net/)
   - [AutoMapper](https://automapper.org/)
   - [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)

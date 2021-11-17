@@ -1,15 +1,29 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Carter;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using MinimalApiArchitecture.Application.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Categories.Queries;
 
-public class GetCategories
+public class GetCategories : ICarterModule
+
 {
-    public static Task<List<Response>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapGet("api/categories", Handler)
+            .WithName(nameof(GetCategories))
+            .WithTags(nameof(Category));
+    }
+
+    public Task<List<Response>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
         context.Categories.ProjectTo<Response>(configuration).ToListAsync();
+
+
 
     public class Response
     {
