@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Domain.Entities;
 
 namespace MinimalApiArchitecture.Application.Infrastructure.Persistence;
 

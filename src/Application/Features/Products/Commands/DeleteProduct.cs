@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Domain.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using MinimalApis.Extensions.Results;
 

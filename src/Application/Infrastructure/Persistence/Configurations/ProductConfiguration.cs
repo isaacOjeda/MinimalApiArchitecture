@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Domain.Entities;
 
 namespace MinimalApiArchitecture.Application.Infrastructure.Persistence.Configurations;
 

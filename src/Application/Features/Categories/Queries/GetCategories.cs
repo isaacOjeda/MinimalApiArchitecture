@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Domain.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Categories.Queries;

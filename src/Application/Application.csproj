@@ -19,4 +19,10 @@
 		</PackageReference>
 		<PackageReference Include="MinimalApis.Extensions" Version="0.4.1-pre.20211113.13" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Domain\Enums\" />
+	  <Folder Include="Domain\Events\" />
+	  <Folder Include="Domain\Exceptions\" />
+	</ItemGroup>
 </Project>

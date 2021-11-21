@@ -1,5 +1,6 @@
 using FluentAssertions;
-using MinimalApiArchitecture.Application.Entities;
+using MinimalApiArchitecture.Application.Domain;
+using MinimalApiArchitecture.Application.Domain.Entities;
 using MinimalApiArchitecture.Application.Features.Products.Commands;
 using MinimalApiArchitecture.Application.Features.Products.Queries;
 using NUnit.Framework;

@@ -1,4 +1,4 @@
-﻿namespace MinimalApiArchitecture.Application.Entities;
+﻿namespace MinimalApiArchitecture.Application.Domain.Entities;
 
 public class Category
 {
