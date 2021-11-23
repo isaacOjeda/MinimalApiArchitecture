@@ -17,7 +17,7 @@ public class DeleteProduct : ICarterModule
             .WithTags(nameof(Product));
     }
 
-    public async Task<Results<NotFound, Ok>> Handler(int productId, ApiDbContext context)
+    public static async Task<Results<NotFound, Ok>> Handler(int productId, ApiDbContext context)
     {
         var product = await context.Products.FindAsync(productId);
 

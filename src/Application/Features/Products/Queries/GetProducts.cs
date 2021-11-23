@@ -22,7 +22,7 @@ public class GetProducts : ICarterModule
     }
 
 
-    public async Task<Ok<List<Response>>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
+    public static async Task<Ok<List<Response>>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
         Results.Extensions.Ok(
             await context.Products
                 .ProjectTo<Response>(configuration)

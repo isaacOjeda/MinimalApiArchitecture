@@ -20,7 +20,7 @@ public class GetCategories : ICarterModule
             .WithTags(nameof(Category));
     }
 
-    public Task<List<Response>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
+    public static Task<List<Response>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
         context.Categories.ProjectTo<Response>(configuration).ToListAsync();
 
 

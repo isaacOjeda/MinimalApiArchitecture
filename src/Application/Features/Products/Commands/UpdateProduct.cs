@@ -19,7 +19,7 @@ public class UpdateProduct : ICarterModule
             .WithTags(nameof(Product));
     }
 
-    public async Task<Results<NotFound, Ok, ValidationProblem>> Handler(
+    public static async Task<Results<NotFound, Ok, ValidationProblem>> Handler(
         Command command,
         ApiDbContext context,
         HttpRequest request)

@@ -19,7 +19,7 @@ public class CreateProduct : ICarterModule
             .WithTags(nameof(Product));
     }
 
-    public async Task<Results<ValidationProblem, Created>> Handler(
+    public static async Task<Results<ValidationProblem, Created>> Handler(
         Command command,
         HttpRequest req,
         ApiDbContext context)
