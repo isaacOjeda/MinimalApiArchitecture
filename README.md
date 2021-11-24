@@ -38,17 +38,17 @@ This project is an experiment trying to create a solution template with Minimal 
 
 # Getting started
 
-The easiest way to get started is using Visual Studio 2022 or with `dotnet run` installing the .NET 6 SDK.
+The easiest way to get started is using Visual Studio 2022 or installing the .NET 6 SDK with `dotnet run`.
 
 # Database Migrations
 
-To create a new migration with `dotnet-ef` you first locate to API folder:
+To create a new migration with `dotnet-ef` you first need to locate your API folder and then write the following:
 ```bash
 dotnet ef migrations add <MigrationName> --project ..\Application\ -o Infrastructure\Persistence\Migrations
 ```
 
 
-And to update de database:
+Aldo, you need to update the database:
 ```bash
 dotnet ef database update
 ```
@@ -58,11 +58,12 @@ dotnet ef database update
 
 This project is an experiment trying to create a solution for Minimal APIs using Vertical Slice Architecture.
 
-If you think this is highly coupled, the important thing is that only the slices are coupled to itself, if you need to change something (like Entity Framework to Dapper) you only
-need to change the slices affected and not a big file with all the data access.
+If you think this is highly coupled, the important thing is that the slices are only coupled between themselves; 
+if you need to change something (e.g. switching Entity Framework for Dapper), you only need to change the affected 
+slices and not a big file with all of the data access.
 
 
-If you want to learn more, this project is based in these resources:
+If you want to learn more, the project is based on these resources:
 - [Choosing between using clean or vertical](https://www.reddit.com/r/dotnet/comments/lw13r2/choosing_between_using_cleanonion_or_vertical/)
 - [Restructuring to a Vertical Slice Architecture](https://codeopinion.com/restructuring-to-a-vertical-slice-architecture/#:~:text=With%20vertical%20slice%20architecture%2C%20you,size%20of%20the%20vertical%20slice.)
 - [Vertical Slice Architecture - Jimmy Bogard](https://www.youtube.com/watch?v=SUiWfhAhgQw&feature=emb_logo&ab_channel=NDCConferences)
@@ -73,23 +74,23 @@ Minimal API that only hosts the application and wires up all the dependencies
 
 ## Application
 
-This project contains all the core and infrastructure of the application. The intention of this is not to separate the application in technical concerns but by functionality
+This project contains all the core and infrastructure of the application. The intention is to separate the application by functionality instead of technical concerns.
 
 ### Domain
 
-This will contain all entities, enums, exceptions, interfaces, types, and logic specific to the domain layer (this layer is shared between all features)
+This will contain all entities, enums, exceptions, interfaces, types, and logic specific to the domain layer (this layer is shared between all features).
 
 We can have domain events, enterprise logic, value objects, etc. This layer (or folder in this project) has the same purpose according with DDD.
 
 ### Infrastructure
 
-This layer contains classes for accessing external resources, these classes should be based on interfaces only if we need them for testing. For example, entity framework is testable, and repositories are not needed. 
+This layer contains classes for accessing external resources. These classes should be based on interfaces only if we need them for testing. For example, Entity Framework is testable, and repositories are not needed. 
 But if external services are called, we should abstract these classes for easy testing.
 
 ### Features
 
-This folder contains all the "slices" of functionality, each slice is not shared with another slice. If you need to change something, you only change a portion of 
-a slice or if new features are needed, you add code in new files and saves you from modify large files (like repositories or services).
+This folder contains all the "slices" of functionality, and each slice does not overlap with other slices. If you need to change something, you only change a portion of 
+a slice or, if new features are needed, you add code in new files which saves you from modifying large files (like repositories or services).
 
 
 # Credits
