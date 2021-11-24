@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
-        services.AddEndpointsProvidesMetadataApiExplorer();
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo()

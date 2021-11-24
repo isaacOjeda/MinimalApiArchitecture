@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Carter;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using MinimalApiArchitecture.Application.Domain.Entities;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
-using MinimalApis.Extensions.Results;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Queries;
 
@@ -15,19 +15,34 @@ public class GetProducts : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/products", Handler)
-          .WithName(nameof(GetProducts))
-          .WithTags(nameof(Product));
+        app.MapGet("api/products", (IMediator mediator) =>
+        {
+            return mediator.Send(new Query());
+        })
+        .WithName(nameof(GetProducts))
+        .WithTags(nameof(Product));
 
     }
 
+    public class Query : IRequest<List<Response>>
+    {
 
-    public static async Task<Ok<List<Response>>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
-        Results.Extensions.Ok(
-            await context.Products
-                .ProjectTo<Response>(configuration)
-                .ToListAsync()
-        );
+    }
+
+    public class Handler : IRequestHandler<Query, List<Response>>
+    {
+        private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
+
+        public Handler(ApiDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public Task<List<Response>> Handle(Query request, CancellationToken cancellationToken) =>
+            _context.Products.ProjectTo<Response>(_mapper.ConfigurationProvider).ToListAsync();
+    }
 
     public class MappingProfile : Profile
     {

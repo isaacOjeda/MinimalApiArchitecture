@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Carter;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -15,15 +16,33 @@ public class GetCategories : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/categories", Handler)
-            .WithName(nameof(GetCategories))
-            .WithTags(nameof(Category));
+        app.MapGet("api/categories", (IMediator mediator) =>
+        {
+            return mediator.Send(new Query());
+        })
+        .WithName(nameof(GetCategories))
+        .WithTags(nameof(Category));
     }
 
-    public static Task<List<Response>> Handler(ApiDbContext context, IConfigurationProvider configuration) =>
-        context.Categories.ProjectTo<Response>(configuration).ToListAsync();
+    public class Query : IRequest<List<Response>>
+    {
 
+    }
 
+    public class Handler : IRequestHandler<Query, List<Response>>
+    {
+        private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
+
+        public Handler(ApiDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public Task<List<Response>> Handle(Query request, CancellationToken cancellationToken) =>
+            _context.Categories.ProjectTo<Response>(_mapper.ConfigurationProvider).ToListAsync();
+    }
 
     public class Response
     {
