@@ -4,8 +4,11 @@ using MediatR;
 using MinimalApiArchitecture.Api.Extensions;
 using MinimalApiArchitecture.Application;
 using MinimalApiArchitecture.Application.Helpers;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.AddSerilog();
 
 builder.Services.AddCustomCors();
 builder.Services.AddPersistence(builder.Configuration);
