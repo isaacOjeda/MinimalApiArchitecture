@@ -1,6 +1,6 @@
 ﻿namespace MinimalApiArchitecture.Application.Domain.Entities;
 
-public class Product
+public class Product : IHasDomainEvent
 {
     public Product(int productId, string name, string description, double price, int categoryId)
     {
@@ -17,4 +17,6 @@ public class Product
     public double Price { get; set; }
     public int CategoryId { get; set; }
     public Category? Category { get; set; }
+
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

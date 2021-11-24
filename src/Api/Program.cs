@@ -3,7 +3,9 @@ using FluentValidation;
 using MediatR;
 using MinimalApiArchitecture.Api.Extensions;
 using MinimalApiArchitecture.Application;
+using MinimalApiArchitecture.Application.Common.Interfaces;
 using MinimalApiArchitecture.Application.Helpers;
+using MinimalApiArchitecture.Application.Infrastructure.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,7 @@ builder.Services.AddCarter();
 builder.Services.AddAutoMapper(typeof(Application));
 builder.Services.AddMediatR(typeof(Application));
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Application));
+builder.Services.AddScoped<IDomainEventService, DomainEventService>();
 
 var app = builder.Build();
 

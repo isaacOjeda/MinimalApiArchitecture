@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Domain.Entities;
+using MinimalApiArchitecture.Application.Domain.Events;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
@@ -56,6 +57,11 @@ public class UpdateProduct : ICarterModule
             if (product is null)
             {
                 return Results.NotFound();
+            }
+
+            if (product.Price != request.Price)
+            {
+                product.DomainEvents.Add(new ProductUpdatePriceEvent(product));
             }
 
             product.Name = request.Name!;

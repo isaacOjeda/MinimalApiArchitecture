@@ -22,7 +22,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Domain\Enums\" />
-	  <Folder Include="Domain\Events\" />
 	  <Folder Include="Domain\Exceptions\" />
 	</ItemGroup>
 </Project>
