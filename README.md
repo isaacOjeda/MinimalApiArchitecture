@@ -33,7 +33,7 @@ This project is an experiment trying to create a solution template with Minimal 
 - Encapsulation
 - Explicit dependencies
 - Single responsibility
-- etc
+- Persistence ignorance*
 
 
 # Getting started
@@ -58,7 +58,11 @@ dotnet ef database update
 
 This project is an experiment trying to create a solution for Minimal APIs using Vertical Architecture Slice.
 
-This project is based in these resources:
+If you think this is highly coupled, the important thing is that only the slices are coupled to itself, if you need to change something (like Entity Framework to Dapper) you only
+need to change the slices affected and not a big file with all the data access.
+
+
+If you want to learn more, this project is based in these resources:
 - [Choosing between using clean or vertical](https://www.reddit.com/r/dotnet/comments/lw13r2/choosing_between_using_cleanonion_or_vertical/)
 - [Restructuring to a Vertical Slice Architecture](https://codeopinion.com/restructuring-to-a-vertical-slice-architecture/#:~:text=With%20vertical%20slice%20architecture%2C%20you,size%20of%20the%20vertical%20slice.)
 - [Vertical Slice Architecture - Jimmy Bogard](https://www.youtube.com/watch?v=SUiWfhAhgQw&feature=emb_logo&ab_channel=NDCConferences)
