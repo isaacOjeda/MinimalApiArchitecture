@@ -56,7 +56,7 @@ dotnet ef database update
 
 # Overview
 
-This project is an experiment trying to create a solution for Minimal APIs using Vertical Architecture Slice.
+This project is an experiment trying to create a solution for Minimal APIs using Vertical Slice Architecture.
 
 If you think this is highly coupled, the important thing is that only the slices are coupled to itself, if you need to change something (like Entity Framework to Dapper) you only
 need to change the slices affected and not a big file with all the data access.
