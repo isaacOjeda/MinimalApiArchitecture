@@ -21,6 +21,7 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(Application));
 var app = builder.Build();
 
 app.UseCors(AppConstants.CorsPolicy);
+app.UseStaticFiles();
 app.MapSwagger();
 app.MapCarter();
 app.Run();

@@ -14,7 +14,7 @@ public class UpdateProduct : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("api/products", async (IMediator mediator, Command command) =>
+        app.MapPut("api/products", async (IMediator mediator, UpdateProductCommand command) =>
         {
             return await mediator.Send(command);
         })
@@ -24,7 +24,7 @@ public class UpdateProduct : ICarterModule
         .ProducesValidationProblem();
     }
 
-    public class Command : IRequest<IResult>
+    public class UpdateProductCommand : IRequest<IResult>
     {
         public int ProductId { get; set; }
         public string? Name { get; set; }
@@ -32,18 +32,18 @@ public class UpdateProduct : ICarterModule
         public double Price { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, IResult>
+    public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, IResult>
     {
         private readonly ApiDbContext _context;
-        private readonly IValidator<Command> _validator;
+        private readonly IValidator<UpdateProductCommand> _validator;
 
-        public Handler(ApiDbContext context, IValidator<Command> validator)
+        public UpdateProductHandler(ApiDbContext context, IValidator<UpdateProductCommand> validator)
         {
             _context = context;
             _validator = validator;
         }
 
-        public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<IResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var result = _validator.Validate(request);
             if (!result.IsValid)
@@ -68,9 +68,9 @@ public class UpdateProduct : ICarterModule
         }
     }
 
-    public class Validator : AbstractValidator<Command>
+    public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
     {
-        public Validator()
+        public UpdateProductValidator()
         {
             RuleFor(r => r.ProductId).NotEmpty();
             RuleFor(r => r.Name).NotEmpty();

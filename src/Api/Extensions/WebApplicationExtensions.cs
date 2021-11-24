@@ -4,11 +4,10 @@ public static class WebApplicationExtensions
 {
     public static WebApplication MapSwagger(this WebApplication app)
     {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
+        app.UseOpenApi();
+        app.UseSwaggerUi3(settings =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
-            c.RoutePrefix = "api";
+            settings.Path = "/api";
         });
 
         return app;

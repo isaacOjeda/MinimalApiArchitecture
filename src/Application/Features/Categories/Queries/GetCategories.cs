@@ -18,40 +18,40 @@ public class GetCategories : ICarterModule
     {
         app.MapGet("api/categories", (IMediator mediator) =>
         {
-            return mediator.Send(new Query());
+            return mediator.Send(new GetCategoriesQuery());
         })
         .WithName(nameof(GetCategories))
         .WithTags(nameof(Category));
     }
 
-    public class Query : IRequest<List<Response>>
+    public class GetCategoriesQuery : IRequest<List<GetCategoriesResponse>>
     {
 
     }
 
-    public class Handler : IRequestHandler<Query, List<Response>>
+    public class GetCategoriesHandler : IRequestHandler<GetCategoriesQuery, List<GetCategoriesResponse>>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
 
-        public Handler(ApiDbContext context, IMapper mapper)
+        public GetCategoriesHandler(ApiDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public Task<List<Response>> Handle(Query request, CancellationToken cancellationToken) =>
-            _context.Categories.ProjectTo<Response>(_mapper.ConfigurationProvider).ToListAsync();
+        public Task<List<GetCategoriesResponse>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken) =>
+            _context.Categories.ProjectTo<GetCategoriesResponse>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
-    public class Response
+    public class GetCategoriesResponse
     {
         public int CategoryId { get; set; }
         public string? Name { get; set; }
     }
 
-    public class MappingProfile : Profile
+    public class GetCategoriesMappingProfile : Profile
     {
-        public MappingProfile() => CreateMap<Category, Response>();
+        public GetCategoriesMappingProfile() => CreateMap<Category, GetCategoriesResponse>();
     }
 }

@@ -41,7 +41,7 @@ public class ProductsModuleTests : TestBase
         var client = Application.CreateClient();
 
         // Act
-        var response = await client.PostAsJsonAsync("api/products", new CreateProduct.Command
+        var response = await client.PostAsJsonAsync("api/products", new CreateProduct.CreateProductCommand
         {
             Description = $"Test product description",
             Name = "Test name",

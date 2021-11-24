@@ -1,6 +1,8 @@
 ﻿@page "/products"
 
-@inject ApiClient.Client Client
+@using MinimalApiArchitecture.Api
+
+@inject Client Client
 
 
 <NavLink class="btn btn-primary mb-2" href="/products/create">
@@ -43,8 +45,8 @@ else
 @code{
     bool _isBusy = true;
 
-    ICollection<ApiClient.GetProducts_Response> _products =
-        new List<ApiClient.GetProducts_Response>();
+    ICollection<GetProductsResponse> _products =
+        new List<GetProductsResponse>();
 
     protected override async Task OnInitializedAsync()
     {

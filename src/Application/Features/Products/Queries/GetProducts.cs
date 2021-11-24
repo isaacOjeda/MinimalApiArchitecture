@@ -17,41 +17,41 @@ public class GetProducts : ICarterModule
     {
         app.MapGet("api/products", (IMediator mediator) =>
         {
-            return mediator.Send(new Query());
+            return mediator.Send(new GetProductsQuery());
         })
         .WithName(nameof(GetProducts))
         .WithTags(nameof(Product));
 
     }
 
-    public class Query : IRequest<List<Response>>
+    public class GetProductsQuery : IRequest<List<GetProductsResponse>>
     {
 
     }
 
-    public class Handler : IRequestHandler<Query, List<Response>>
+    public class GetProductsHandler : IRequestHandler<GetProductsQuery, List<GetProductsResponse>>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
 
-        public Handler(ApiDbContext context, IMapper mapper)
+        public GetProductsHandler(ApiDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public Task<List<Response>> Handle(Query request, CancellationToken cancellationToken) =>
-            _context.Products.ProjectTo<Response>(_mapper.ConfigurationProvider).ToListAsync();
+        public Task<List<GetProductsResponse>> Handle(GetProductsQuery request, CancellationToken cancellationToken) =>
+            _context.Products.ProjectTo<GetProductsResponse>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
-    public class MappingProfile : Profile
+    public class GetProductsMappingProfile : Profile
     {
-        public MappingProfile() => CreateMap<Product, Response>()
+        public GetProductsMappingProfile() => CreateMap<Product, GetProductsResponse>()
             .ForMember(
                 d => d.CategoryName,
                 opt => opt.MapFrom(mf => mf.Category != null ? mf.Category.Name : string.Empty)
             );
     }
 
-    public record Response(int ProductId, string Name, string Description, double Price, string CategoryName);
+    public record GetProductsResponse(int ProductId, string Name, string Description, double Price, string CategoryName);
 }

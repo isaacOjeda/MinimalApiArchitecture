@@ -11,15 +11,23 @@
 	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
 	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
 	<PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
+	<PackageReference Include="NSwag.AspNetCore" Version="13.14.5" />
+	<PackageReference Include="NSwag.MSBuild" Version="13.14.5">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
   </ItemGroup>
-
   <ItemGroup>
 	<ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
-
+	<Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+		<Message Importance="High" Text="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)" />
+		<Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)" />
+		<Delete Files="$(ProjectDir)\obj\$(MSBuildProjectFile).NSwag.targets" />
+		<!-- This thingy trigger project rebuild -->
+	</Target>
 </Project>

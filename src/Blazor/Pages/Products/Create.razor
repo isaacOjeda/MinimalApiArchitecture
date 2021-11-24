@@ -1,7 +1,9 @@
 ﻿@page "/products/create"
-@using Blazor.ViewModels.Products
 
-@inject ApiClient.Client Client
+@using Blazor.ViewModels.Products
+@using MinimalApiArchitecture.Api
+
+@inject Client Client
 @inject NavigationManager NavManager
 
 <h3>New Product</h3>
@@ -54,7 +56,7 @@
 
 @code {
     CreateProductViewModel viewModel = new();
-    List<ApiClient.GetCategories_Response> categories = new();
+    List<GetCategoriesResponse> categories = new();
     bool isBusy = false;
 
     protected override async Task OnInitializedAsync()
@@ -74,7 +76,7 @@
 
         isBusy = true;
 
-        await Client.CreateProductAsync(new ApiClient.CreateProduct_Command
+        await Client.CreateProductAsync(new CreateProductCommand
         {
             CategoryId = viewModel.CategoryId,
             Description = viewModel.Description,

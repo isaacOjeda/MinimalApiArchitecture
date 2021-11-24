@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using MinimalApiArchitecture.Application.Helpers;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
@@ -10,20 +9,26 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(c =>
+        //services.AddSwaggerGen(c =>
+        //{
+        //    c.SwaggerDoc("v1", new OpenApiInfo()
+        //    {
+        //        Description = "Minimal APIs & Angular",
+        //        Title = "Minimal APIs & Angular",
+        //        Version = "v1",
+        //        Contact = new OpenApiContact()
+        //        {
+        //            Name = "Isaac Ojeda",
+        //            Url = new Uri("https://github.com/isaacOjeda")
+        //        }
+        //    });
+        //    c.CustomSchemaIds(x => x.FullName);
+        //});
+
+        services.AddOpenApiDocument(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo()
-            {
-                Description = "Minimal APIs & Angular",
-                Title = "Minimal APIs & Angular",
-                Version = "v1",
-                Contact = new OpenApiContact()
-                {
-                    Name = "Isaac Ojeda",
-                    Url = new Uri("https://github.com/isaacOjeda")
-                }
-            });
-            c.CustomSchemaIds(x => x.FullName);
+            c.Title = "Minimal APIs";
+            c.Version = "v1";
         });
 
         return services;

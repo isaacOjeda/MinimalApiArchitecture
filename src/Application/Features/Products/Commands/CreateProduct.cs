@@ -14,7 +14,7 @@ public class CreateProduct : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/products", async (HttpRequest req, IMediator mediator, Command command) =>
+        app.MapPost("api/products", async (HttpRequest req, IMediator mediator, CreateProductCommand command) =>
         {
             return await mediator.Send(command);
         })
@@ -24,7 +24,7 @@ public class CreateProduct : ICarterModule
         .Produces(StatusCodes.Status201Created);
     }
 
-    public class Command : IRequest<IResult>
+    public class CreateProductCommand : IRequest<IResult>
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -32,18 +32,18 @@ public class CreateProduct : ICarterModule
         public int CategoryId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, IResult>
+    public class CreateProductHandler : IRequestHandler<CreateProductCommand, IResult>
     {
         private readonly ApiDbContext _context;
-        private readonly IValidator<Command> _validator;
+        private readonly IValidator<CreateProductCommand> _validator;
 
-        public Handler(ApiDbContext context, IValidator<Command> validator)
+        public CreateProductHandler(ApiDbContext context, IValidator<CreateProductCommand> validator)
         {
             _context = context;
             _validator = validator;
         }
 
-        public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<IResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var result = _validator.Validate(request);
             if (!result.IsValid)
@@ -61,9 +61,9 @@ public class CreateProduct : ICarterModule
         }
     }
 
-    public class Validator : AbstractValidator<Command>
+    public class CreateProductValidator : AbstractValidator<CreateProductCommand>
     {
-        public Validator()
+        public CreateProductValidator()
         {
             RuleFor(r => r.Name).NotEmpty();
             RuleFor(r => r.Description).NotEmpty();

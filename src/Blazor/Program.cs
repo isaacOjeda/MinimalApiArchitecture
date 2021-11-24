@@ -1,6 +1,7 @@
 using Blazor;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MinimalApiArchitecture.Api;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -12,7 +13,7 @@ builder.Services.AddScoped(sp =>
     var host = builder.Configuration["Host"];
     var httpClient = sp.GetRequiredService<HttpClient>();
 
-    return new ApiClient.Client(host, httpClient);
+    return new Client(host, httpClient);
 });
 
 await builder.Build().RunAsync();

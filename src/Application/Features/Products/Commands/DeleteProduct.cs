@@ -14,31 +14,31 @@ public class DeleteProduct : ICarterModule
     {
         app.MapDelete("api/products/{productId}", async (IMediator mediator, int productId) =>
         {
-            return await mediator.Send(new Command(productId));
+            return await mediator.Send(new DeleteProductCommand(productId));
         })
         .WithName(nameof(DeleteProduct))
         .WithTags(nameof(Product))
         .Produces(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest);
+        .Produces(StatusCodes.Status404NotFound);
     }
 
-    public class Command : IRequest<IResult>
+    public class DeleteProductCommand : IRequest<IResult>
     {
-        public Command(int productId) => ProductId = productId;
+        public DeleteProductCommand(int productId) => ProductId = productId;
 
         public int ProductId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, IResult>
+    public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, IResult>
     {
         private readonly ApiDbContext _context;
 
-        public Handler(ApiDbContext context)
+        public DeleteProductHandler(ApiDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IResult> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<IResult> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _context.Products.FindAsync(request.ProductId);
 
