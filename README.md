@@ -7,11 +7,12 @@ This project is an experiment trying to create a solution template with Minimal 
 - API
   - [Minimal API with .NET 6](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0) and [Carter](https://github.com/CarterCommunity/Carter)
   - [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/)
-  - CQRS
+  - CQRS with [MediatR](https://github.com/jbogard/MediatR)
   - [FluentValidation](https://fluentvalidation.net/)
   - [AutoMapper](https://automapper.org/)
   - [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)
-  - [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+  - Swagger with Code generation using [NSwag](https://github.com/RicoSuter/NSwag)
+  - Logging with [Serilog](https://github.com/serilog/serilog-aspnetcore)
 
 - Testing
   - [NUnit](https://nunit.org/)
@@ -19,12 +20,20 @@ This project is an experiment trying to create a solution template with Minimal 
   - [Respawn](https://github.com/jbogard/Respawn)
 
 - Angular
-  - HttpClient generated with NSwag Studio and OpenAPI definition
-  - Simple CRUD and nothing more
+  - HttpClient generated with NSwag and OpenAPI definition
+  - Simple CRUD
 
 - Blazor
-  - HttpClient generated with NSwag Studio and OpenAPI definition
-  - Simple CRUD and nothing more	
+  - HttpClient generated with NSwag and OpenAPI definition
+  - Simple CRUD
+
+# Common design principles
+
+- Separation of concerns
+- Encapsulation
+- Explicit dependencies
+- Single responsibility
+- etc
 
 
 # Getting started
@@ -47,31 +56,42 @@ dotnet ef database update
 
 # Overview
 
-🏗️
+This project is an experiment trying to create a solution for Minimal APIs using Vertical Architecture Slice.
+
+This project is based in these resources:
+- [Choosing between using clean or vertical](https://www.reddit.com/r/dotnet/comments/lw13r2/choosing_between_using_cleanonion_or_vertical/)
+- [Restructuring to a Vertical Slice Architecture](https://codeopinion.com/restructuring-to-a-vertical-slice-architecture/#:~:text=With%20vertical%20slice%20architecture%2C%20you,size%20of%20the%20vertical%20slice.)
+- [Vertical Slice Architecture - Jimmy Bogard](https://www.youtube.com/watch?v=SUiWfhAhgQw&feature=emb_logo&ab_channel=NDCConferences)
 
 ## API
 
-🏗️
+Minimal API that only hosts the application and wires up all the dependencies
 
-## Application 
+## Application
 
-🏗️
+This project contains all the core and infrastructure of the application. The intention of this is not to separate the application in technical concerns but by functionality
 
-### Entities
+### Domain
 
-This will contain all entities, enums, exceptions, interfaces, types and logic specific to the domain layer (this layer it's shared between all features)
+This will contain all entities, enums, exceptions, interfaces, types, and logic specific to the domain layer (this layer is shared between all features)
+
+We can have domain events, enterprise logic, value objects, etc. This layer (or folder in this project) has the same purpose according with DDD.
 
 ### Infrastructure
 
-🏗️
+This layer contains classes for accessing external resources, these classes should be based on interfaces only if we need them for testing. For example, entity framework is testable, and repositories are not needed. 
+But if external services are called, we should abstract these classes for easy testing.
 
 ### Features
 
-🏗️
+This folder contains all the "slices" of functionality, each slice is not shared with another slice. If you need to change something, you only change a portion of 
+a slice or if new features are needed, you add code in new files and saves you from modify large files (like repositories or services).
+
 
 # Credits
 
 Inspired by:
 
 - [ContosoUniversityDotNetCore-Pages](https://github.com/jbogard/ContosoUniversityDotNetCore-Pages) by Jimmy Bogard
+- [CleanArchitecture](https://github.com/jasontaylordev/CleanArchitecture) by Jason Taylor
 - [Carter](https://github.com/CarterCommunity/Carter) by Carter Community
