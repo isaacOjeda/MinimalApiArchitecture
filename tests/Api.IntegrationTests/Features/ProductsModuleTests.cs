@@ -1,5 +1,4 @@
 using FluentAssertions;
-using MinimalApiArchitecture.Application.Domain;
 using MinimalApiArchitecture.Application.Domain.Entities;
 using MinimalApiArchitecture.Application.Features.Products.Commands;
 using MinimalApiArchitecture.Application.Features.Products.Queries;
@@ -25,7 +24,7 @@ public class ProductsModuleTests : TestBase
         var client = Application.CreateClient();
 
         // Act
-        var products = await client.GetFromJsonAsync<List<GetProducts.Response>>("/api/products");
+        var products = await client.GetFromJsonAsync<List<GetProducts.GetProductsResponse>>("/api/products");
 
         // Assert
         products.Should().NotBeNullOrEmpty();
@@ -64,7 +63,7 @@ public class ProductsModuleTests : TestBase
         var client = Application.CreateClient();
 
         // Act
-        var response = await client.PutAsJsonAsync("api/products", new UpdateProduct.Command
+        var response = await client.PutAsJsonAsync("api/products", new UpdateProduct.UpdateProductCommand
         {
             Description = "Updated Desc for ID 1",
             Name = "Updated name for ID 1",
