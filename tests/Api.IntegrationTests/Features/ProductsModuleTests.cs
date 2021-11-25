@@ -68,7 +68,8 @@ public class ProductsModuleTests : TestBase
             Description = "Updated Desc for ID 1",
             Name = "Updated name for ID 1",
             Price = 999,
-            ProductId = product1.ProductId
+            ProductId = product1.ProductId,
+            CategoryId = product1.CategoryId
         });
 
         // Assert
