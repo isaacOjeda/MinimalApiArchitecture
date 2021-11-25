@@ -13,6 +13,7 @@ This project is an experiment trying to create a solution template with Minimal 
   - [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)
   - Swagger with Code generation using [NSwag](https://github.com/RicoSuter/NSwag)
   - Logging with [Serilog](https://github.com/serilog/serilog-aspnetcore)
+  - [Decorator](https://refactoring.guru/design-patterns/decorator) pattern using PipelineBehaviors
 
 - Testing
   - [NUnit](https://nunit.org/)

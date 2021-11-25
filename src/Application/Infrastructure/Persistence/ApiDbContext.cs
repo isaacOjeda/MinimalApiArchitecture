@@ -9,13 +9,13 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 public class ApiDbContext : DbContext
 {
-    private readonly IMediator _mediator;
+    private readonly IPublisher _publisher;
     private readonly ILogger<ApiDbContext> _logger;
     private IDbContextTransaction? _currentTransaction;
 
-    public ApiDbContext(DbContextOptions<ApiDbContext> options, IMediator mediator, ILogger<ApiDbContext> logger) : base(options)
+    public ApiDbContext(DbContextOptions<ApiDbContext> options, IPublisher publisher, ILogger<ApiDbContext> logger) : base(options)
     {
-        _mediator = mediator;
+        _publisher = publisher;
         _logger = logger;
 
         _logger.LogDebug("DbContext created.");
@@ -75,7 +75,7 @@ public class ApiDbContext : DbContext
 
             // Note: If an unhandled exception occurs, all the saved changes will be rolled back
             // by the TransactionBehavior. Changing entity state and their events should be atomic
-            await _mediator.Publish(@event);
+            await _publisher.Publish(@event);
         }
 
         return result;
