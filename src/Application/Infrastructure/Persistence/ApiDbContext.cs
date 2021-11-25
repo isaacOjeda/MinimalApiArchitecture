@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using MinimalApiArchitecture.Application.Common.Interfaces;
 using MinimalApiArchitecture.Application.Domain;
 using MinimalApiArchitecture.Application.Domain.Entities;
@@ -8,10 +10,16 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence;
 public class ApiDbContext : DbContext
 {
     private readonly IDomainEventService _domainEventService;
+    private readonly ILogger<ApiDbContext> _logger;
+    private IDbContextTransaction _currentTransaction;
 
-    public ApiDbContext(DbContextOptions<ApiDbContext> options, IDomainEventService domainEventService) : base(options)
+    public ApiDbContext(DbContextOptions<ApiDbContext> options, IDomainEventService domainEventService, ILogger<ApiDbContext> logger) : base(options)
     {
+
         _domainEventService = domainEventService;
+        _logger = logger;
+
+        _logger.LogDebug("DbContext created.");
     }
 
     public DbSet<Product> Products => Set<Product>();
@@ -37,6 +45,29 @@ public class ApiDbContext : DbContext
         await DispatchEvents(events);
 
         return result;
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        _logger.LogDebug("Starting Transaction");
+
+        _currentTransaction = await Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        _logger.LogDebug("Commiting Transaction");
+
+        await _currentTransaction.CommitAsync();
+    }
+
+    public async Task RollbackTransaction()
+    {
+        _logger.LogDebug("Rolling back Transaction");
+
+        await _currentTransaction.RollbackAsync();
+
+        _currentTransaction.Dispose();
     }
 
     private async Task DispatchEvents(DomainEvent[] events)

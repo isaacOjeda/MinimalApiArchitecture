@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using MinimalApiArchitecture.Api.Extensions;
 using MinimalApiArchitecture.Application;
+using MinimalApiArchitecture.Application.Common.Behaviours;
 using MinimalApiArchitecture.Application.Common.Interfaces;
 using MinimalApiArchitecture.Application.Helpers;
 using MinimalApiArchitecture.Application.Infrastructure.Services;
@@ -18,6 +19,7 @@ builder.Services.AddSwagger();
 builder.Services.AddCarter();
 builder.Services.AddAutoMapper(typeof(Application));
 builder.Services.AddMediatR(typeof(Application));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Application));
 builder.Services.AddScoped<IDomainEventService, DomainEventService>();
 
