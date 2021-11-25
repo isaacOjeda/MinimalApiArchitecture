@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using MinimalApiArchitecture.Application.Common.Behaviours;
 using MinimalApiArchitecture.Application.Helpers;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
@@ -9,22 +11,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
-        //services.AddSwaggerGen(c =>
-        //{
-        //    c.SwaggerDoc("v1", new OpenApiInfo()
-        //    {
-        //        Description = "Minimal APIs & Angular",
-        //        Title = "Minimal APIs & Angular",
-        //        Version = "v1",
-        //        Contact = new OpenApiContact()
-        //        {
-        //            Name = "Isaac Ojeda",
-        //            Url = new Uri("https://github.com/isaacOjeda")
-        //        }
-        //    });
-        //    c.CustomSchemaIds(x => x.FullName);
-        //});
-
         services.AddOpenApiDocument(c =>
         {
             c.Title = "Minimal APIs";
@@ -52,6 +38,14 @@ public static class ServiceCollectionExtensions
         var connectionString = config.GetConnectionString("Default");
 
         services.AddDbContext<ApiDbContext>(options => options.UseSqlServer(connectionString));
+
+        return services;
+    }
+
+    public static IServiceCollection AddMediator(this IServiceCollection services)
+    {
+        services.AddMediatR(typeof(Application.Application));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 
         return services;
     }

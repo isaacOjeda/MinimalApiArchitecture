@@ -19,9 +19,4 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Domain\Enums\" />
-	  <Folder Include="Domain\Exceptions\" />
-	</ItemGroup>
 </Project>
