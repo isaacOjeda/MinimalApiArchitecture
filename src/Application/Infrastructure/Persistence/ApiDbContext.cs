@@ -67,7 +67,13 @@ public class ApiDbContext : DbContext
                 .Where(domainEvent => !domainEvent.IsPublished)
                 .ToArray();
 
-        await DispatchEvents(events);
+        foreach (var @event in events)
+        {
+            @event.IsPublished = true;
+            // Note: If an unhandled exception occurs, all the saved changes will be rolled back
+            // by the TransactionBehavior. Changing entity state and their events should be atomic
+            await _domainEventService.Publish(@event);
+        }
 
         return result;
     }
@@ -77,13 +83,5 @@ public class ApiDbContext : DbContext
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
-    }
-    private async Task DispatchEvents(DomainEvent[] events)
-    {
-        foreach (var @event in events)
-        {
-            @event.IsPublished = true;
-            await _domainEventService.Publish(@event);
-        }
     }
 }
