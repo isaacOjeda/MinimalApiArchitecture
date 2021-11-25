@@ -1,11 +1,13 @@
-﻿namespace MinimalApiArchitecture.Application.Domain;
+﻿using MediatR;
+
+namespace MinimalApiArchitecture.Application.Domain;
 
 public interface IHasDomainEvent
 {
     public List<DomainEvent> DomainEvents { get; set; }
 }
 
-public abstract class DomainEvent
+public abstract class DomainEvent : INotification
 {
     protected DomainEvent()
     {

@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using MinimalApiArchitecture.Application.Common.Models;
 using MinimalApiArchitecture.Application.Domain.Events;
 
 namespace MinimalApiArchitecture.Application.Features.Products.EventHandlers
 {
-    public class PriceChangedEventHandler : INotificationHandler<DomainEventNotification<ProductUpdatePriceEvent>>
+    public class PriceChangedEventHandler : INotificationHandler<ProductUpdatePriceEvent>
     {
         private readonly ILogger<PriceChangedEventHandler> _logger;
 
@@ -14,11 +13,9 @@ namespace MinimalApiArchitecture.Application.Features.Products.EventHandlers
             _logger = logger;
         }
 
-        public Task Handle(DomainEventNotification<ProductUpdatePriceEvent> notification, CancellationToken cancellationToken)
+        public Task Handle(ProductUpdatePriceEvent notification, CancellationToken cancellationToken)
         {
-            var domainEvent = notification.DomainEvent;
-
-            _logger.LogWarning("Minimal APIs Domain Event: {DomainEvent}", domainEvent.GetType().Name);
+            _logger.LogWarning("Minimal APIs Domain Event: {DomainEvent}", notification.GetType().Name);
 
             return Task.CompletedTask;
         }

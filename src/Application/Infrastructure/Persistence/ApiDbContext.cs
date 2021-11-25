@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using MinimalApiArchitecture.Application.Common.Interfaces;
 using MinimalApiArchitecture.Application.Domain;
 using MinimalApiArchitecture.Application.Domain.Entities;
 
@@ -9,13 +9,13 @@ namespace MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 public class ApiDbContext : DbContext
 {
-    private readonly IDomainEventService _domainEventService;
+    private readonly IMediator _mediator;
     private readonly ILogger<ApiDbContext> _logger;
     private IDbContextTransaction? _currentTransaction;
 
-    public ApiDbContext(DbContextOptions<ApiDbContext> options, IDomainEventService domainEventService, ILogger<ApiDbContext> logger) : base(options)
+    public ApiDbContext(DbContextOptions<ApiDbContext> options, IMediator mediator, ILogger<ApiDbContext> logger) : base(options)
     {
-        _domainEventService = domainEventService;
+        _mediator = mediator;
         _logger = logger;
 
         _logger.LogDebug("DbContext created.");
@@ -72,7 +72,7 @@ public class ApiDbContext : DbContext
             @event.IsPublished = true;
             // Note: If an unhandled exception occurs, all the saved changes will be rolled back
             // by the TransactionBehavior. Changing entity state and their events should be atomic
-            await _domainEventService.Publish(@event);
+            await _mediator.Publish(@event);
         }
 
         return result;
