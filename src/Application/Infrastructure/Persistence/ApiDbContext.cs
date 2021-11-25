@@ -25,9 +25,15 @@ public class ApiDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public async Task BeginTransactionAsync()
     {
-        _logger.LogDebug("Starting Transaction");
+        if (_currentTransaction is not null)
+        {
+            _logger.LogInformation("A transaction with ID {ID} is already created", _currentTransaction.TransactionId);
+            return;
+        }
+
 
         _currentTransaction = await Database.BeginTransactionAsync();
+        _logger.LogInformation("A new transaction was created with ID {ID}", _currentTransaction.TransactionId);
     }
 
     public async Task CommitTransactionAsync()
@@ -37,9 +43,12 @@ public class ApiDbContext : DbContext
             return;
         }
 
-        _logger.LogDebug("Commiting Transaction");
+        _logger.LogInformation("Commiting Transaction {ID}", _currentTransaction.TransactionId);
 
         await _currentTransaction.CommitAsync();
+
+        _currentTransaction.Dispose();
+        _currentTransaction = null;
     }
 
     public async Task RollbackTransaction()
@@ -49,7 +58,7 @@ public class ApiDbContext : DbContext
             return;
         }
 
-        _logger.LogDebug("Rolling back Transaction");
+        _logger.LogDebug("Rolling back Transaction {ID}", _currentTransaction.TransactionId);
 
         await _currentTransaction.RollbackAsync();
 
@@ -74,7 +83,9 @@ public class ApiDbContext : DbContext
             _logger.LogInformation("New domain event {Event}", @event.GetType().Name);
 
             // Note: If an unhandled exception occurs, all the saved changes will be rolled back
-            // by the TransactionBehavior. Changing entity state and their events should be atomic
+            // by the TransactionBehavior. All the operations related to a domain event finish
+            // successfully or none of them do.
+            // Reference: https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation#what-is-a-domain-event
             await _publisher.Publish(@event);
         }
 
