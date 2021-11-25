@@ -11,42 +11,18 @@ public class ApiDbContext : DbContext
 {
     private readonly IDomainEventService _domainEventService;
     private readonly ILogger<ApiDbContext> _logger;
-    private IDbContextTransaction _currentTransaction;
+    private IDbContextTransaction? _currentTransaction;
 
     public ApiDbContext(DbContextOptions<ApiDbContext> options, IDomainEventService domainEventService, ILogger<ApiDbContext> logger) : base(options)
     {
-
         _domainEventService = domainEventService;
         _logger = logger;
 
         _logger.LogDebug("DbContext created.");
     }
 
-    public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        builder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        var events = ChangeTracker.Entries<IHasDomainEvent>()
-                .Select(x => x.Entity.DomainEvents)
-                .SelectMany(x => x)
-                .Where(domainEvent => !domainEvent.IsPublished)
-                .ToArray();
-
-        var result = await base.SaveChangesAsync(cancellationToken);
-
-        await DispatchEvents(events);
-
-        return result;
-    }
-
+    public DbSet<Product> Products => Set<Product>();
     public async Task BeginTransactionAsync()
     {
         _logger.LogDebug("Starting Transaction");
@@ -56,6 +32,11 @@ public class ApiDbContext : DbContext
 
     public async Task CommitTransactionAsync()
     {
+        if (_currentTransaction is null)
+        {
+            return;
+        }
+
         _logger.LogDebug("Commiting Transaction");
 
         await _currentTransaction.CommitAsync();
@@ -63,13 +44,40 @@ public class ApiDbContext : DbContext
 
     public async Task RollbackTransaction()
     {
+        if (_currentTransaction is null)
+        {
+            return;
+        }
+
         _logger.LogDebug("Rolling back Transaction");
 
         await _currentTransaction.RollbackAsync();
 
         _currentTransaction.Dispose();
+        _currentTransaction = null;
     }
 
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        var events = ChangeTracker.Entries<IHasDomainEvent>()
+                .Select(x => x.Entity.DomainEvents)
+                .SelectMany(x => x)
+                .Where(domainEvent => !domainEvent.IsPublished)
+                .ToArray();
+
+        await DispatchEvents(events);
+
+        return result;
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
+    }
     private async Task DispatchEvents(DomainEvent[] events)
     {
         foreach (var @event in events)

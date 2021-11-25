@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MinimalApiArchitecture.Application.Common.Interfaces;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using Moq;
@@ -14,6 +15,6 @@ public class DbContextInMemoryFactory
             .Options;
 
 
-        return new ApiDbContext(options, Mock.Of<IDomainEventService>());
+        return new ApiDbContext(options, Mock.Of<IDomainEventService>(), Mock.Of<ILogger<ApiDbContext>>());
     }
 }
