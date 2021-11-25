@@ -70,6 +70,9 @@ public class ApiDbContext : DbContext
         foreach (var @event in events)
         {
             @event.IsPublished = true;
+
+            _logger.LogInformation("New domain event {Event}", @event.GetType().Name);
+
             // Note: If an unhandled exception occurs, all the saved changes will be rolled back
             // by the TransactionBehavior. Changing entity state and their events should be atomic
             await _mediator.Publish(@event);

@@ -12,11 +12,13 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
         _logger = logger;
     }
 
-    public async Task Process(TRequest request, CancellationToken cancellationToken)
+    public Task Process(TRequest request, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
 
         _logger.LogInformation("Minimal API Request: {Name} {@Request}", requestName, request);
+
+        return Task.CompletedTask;
     }
 }
 
