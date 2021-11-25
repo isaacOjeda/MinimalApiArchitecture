@@ -509,6 +509,7 @@ export class UpdateProductCommand implements IUpdateProductCommand {
     name?: string | undefined;
     description?: string | undefined;
     price?: number;
+    categoryId?: number;
 
     constructor(data?: IUpdateProductCommand) {
         if (data) {
@@ -525,6 +526,7 @@ export class UpdateProductCommand implements IUpdateProductCommand {
             this.name = _data["name"];
             this.description = _data["description"];
             this.price = _data["price"];
+            this.categoryId = _data["categoryId"];
         }
     }
 
@@ -541,6 +543,7 @@ export class UpdateProductCommand implements IUpdateProductCommand {
         data["name"] = this.name;
         data["description"] = this.description;
         data["price"] = this.price;
+        data["categoryId"] = this.categoryId;
         return data; 
     }
 }
@@ -550,6 +553,7 @@ export interface IUpdateProductCommand {
     name?: string | undefined;
     description?: string | undefined;
     price?: number;
+    categoryId?: number;
 }
 
 export class GetCategoriesResponse implements IGetCategoriesResponse {

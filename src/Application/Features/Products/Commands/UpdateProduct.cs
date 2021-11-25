@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApiArchitecture.Application.Domain.Entities;
-using MinimalApiArchitecture.Application.Domain.Events;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
@@ -31,6 +30,7 @@ public class UpdateProduct : ICarterModule
         public string? Name { get; set; }
         public string? Description { get; set; }
         public double Price { get; set; }
+        public int CategoryId { get; set; }
     }
 
     public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, IResult>
@@ -59,14 +59,7 @@ public class UpdateProduct : ICarterModule
                 return Results.NotFound();
             }
 
-            if (product.Price != request.Price)
-            {
-                product.DomainEvents.Add(new ProductUpdatePriceEvent(product));
-            }
-
-            product.Name = request.Name!;
-            product.Description = request.Description!;
-            product.Price = request.Price;
+            product.UpdateInfo(request);
 
             await _context.SaveChangesAsync();
 

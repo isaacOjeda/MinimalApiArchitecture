@@ -926,6 +926,7 @@ namespace MinimalApiArchitecture.Api
         private string _name;
         private string _description;
         private double _price;
+        private int _categoryId;
     
         [Newtonsoft.Json.JsonProperty("productId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int ProductId
@@ -978,6 +979,20 @@ namespace MinimalApiArchitecture.Api
                 if (_price != value)
                 {
                     _price = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+    
+        [Newtonsoft.Json.JsonProperty("categoryId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CategoryId
+        {
+            get { return _categoryId; }
+            set
+            {
+                if (_categoryId != value)
+                {
+                    _categoryId = value;
                     RaisePropertyChanged();
                 }
             }

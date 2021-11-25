@@ -266,6 +266,10 @@
           "price": {
             "type": "number",
             "format": "double"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

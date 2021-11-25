@@ -10,7 +10,6 @@ public static class WebApplicationBuilderExtensions
         host.UseSerilog();
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
