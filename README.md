@@ -59,7 +59,7 @@ dotnet ef database update
 
 This project is an experiment trying to create a solution for Minimal APIs using Vertical Slice Architecture.
 
-If you think this is highly coupled, the important thing is that the slices are only coupled between themselves; 
+If you think this is highly coupled, the important thing is to minimize coupling between slices, and maximize coupling in a slice; 
 if you need to change something (e.g. switching Entity Framework for Dapper), you only need to change the affected 
 slices and not a big file with all of the data access.
 
