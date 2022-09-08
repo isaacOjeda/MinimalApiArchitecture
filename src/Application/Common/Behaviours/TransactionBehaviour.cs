@@ -5,7 +5,7 @@ using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 namespace MinimalApiArchitecture.Application.Common.Behaviours
 {
     public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : notnull
+        where TRequest : IRequest<TResponse>
     {
         private readonly ApiDbContext _context;
         private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;

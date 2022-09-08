@@ -5,7 +5,7 @@ public class Category
     public Category(int categoryId, string name)
     {
         CategoryId = categoryId;
-        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Name = name;
     }
 
     public int CategoryId { get; set; }

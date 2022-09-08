@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 using NUnit.Framework;
 using Respawn;
+using Respawn.Graph;
 using System.Threading.Tasks;
 
 namespace MinimalApiArchitecture.Api.IntegrationTests;
@@ -43,7 +44,7 @@ public class TestBase
     {
         using var scope = Application.Services.CreateScope();
 
-        var context = scope.ServiceProvider.GetService<ApiDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 
         context.Add(entity);
 
@@ -56,14 +57,14 @@ public class TestBase
     {
         using var scope = Application.Services.CreateScope();
 
-        var context = scope.ServiceProvider.GetService<ApiDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 
         return await context.FindAsync<TEntity>(keyValues);
     }
 
     private static void EnsureDatabase(IServiceScope scope)
     {
-        var context = scope.ServiceProvider.GetService<ApiDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 
         context.Database.Migrate();
     }
@@ -72,7 +73,10 @@ public class TestBase
     {
         var checkpoint = new Checkpoint
         {
-            TablesToIgnore = new[] { "__EFMigrationsHistory" }
+            TablesToIgnore = new Table[]
+            {
+                new Table("__EFMigrationsHistory")
+            }
         };
 
         await checkpoint.Reset(ApiWebApplication.TestConnectionString);
