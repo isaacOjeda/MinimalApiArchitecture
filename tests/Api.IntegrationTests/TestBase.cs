@@ -71,15 +71,16 @@ public class TestBase
 
     private static async Task ResetState()
     {
-        var checkpoint = new Checkpoint
+        var checkpoint = await Respawner.CreateAsync(ApiWebApplication.TestConnectionString, new RespawnerOptions
         {
             TablesToIgnore = new Table[]
             {
-                new Table("__EFMigrationsHistory")
+                "__EFMigrationsHistory"
             }
-        };
+        });
 
-        await checkpoint.Reset(ApiWebApplication.TestConnectionString);
+
+        await checkpoint.ResetAsync(ApiWebApplication.TestConnectionString);
     }
 
 }
