@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MinimalApiArchitecture.Application.Common.Behaviours;
 using MinimalApiArchitecture.Application.Helpers;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
@@ -44,8 +43,11 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddMediator(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(Application.Application));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(typeof(Application.Application).Assembly);
+            config.AddOpenBehavior(typeof(TransactionBehaviour<,>));
+        });
 
         return services;
     }
