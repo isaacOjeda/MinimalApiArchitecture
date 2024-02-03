@@ -22,34 +22,25 @@ public class DeleteProduct : ICarterModule
         .Produces(StatusCodes.Status404NotFound);
     }
 
-    public class DeleteProductCommand : IRequest<IResult>
+    public class DeleteProductCommand(int productId) : IRequest<IResult>
     {
-        public DeleteProductCommand(int productId) => ProductId = productId;
-
-        public int ProductId { get; set; }
+        public int ProductId { get; set; } = productId;
     }
 
-    public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, IResult>
+    public class DeleteProductHandler(ApiDbContext context) : IRequestHandler<DeleteProductCommand, IResult>
     {
-        private readonly ApiDbContext _context;
-
-        public DeleteProductHandler(ApiDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IResult> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products.FindAsync(request.ProductId);
+            var product = await context.Products.FindAsync(request.ProductId);
 
             if (product is null)
             {
                 return Results.NotFound();
             }
 
-            _context.Products.Remove(product);
+            context.Products.Remove(product);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return Results.Ok();
         }

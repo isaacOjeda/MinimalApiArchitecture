@@ -4,33 +4,27 @@ using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Common.Behaviours
 {
-    public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class TransactionBehaviour<TRequest, TResponse>(
+        ApiDbContext context,
+        ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
+        : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly ApiDbContext _context;
-        private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
-
-        public TransactionBehaviour(ApiDbContext context, ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
-        {
-            _context = context;
-            _logger = logger;
-        }
-
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             try
             {
-                await _context.BeginTransactionAsync();
+                await context.BeginTransactionAsync();
                 var response = await next();
-                await _context.CommitTransactionAsync();
+                await context.CommitTransactionAsync();
 
                 return response;
             }
             catch (Exception)
             {
-                _logger.LogError("Request failed: Rolling back all the changes made to the Context");
+                logger.LogError("Request failed: Rolling back all the changes made to the Context");
 
-                await _context.RollbackTransaction();
+                await context.RollbackTransaction();
                 throw;
             }
         }

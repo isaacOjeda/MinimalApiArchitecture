@@ -33,26 +33,18 @@ public class UpdateProduct : ICarterModule
         public int CategoryId { get; set; }
     }
 
-    public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, IResult>
+    public class UpdateProductHandler(ApiDbContext context, IValidator<UpdateProductCommand> validator)
+        : IRequestHandler<UpdateProductCommand, IResult>
     {
-        private readonly ApiDbContext _context;
-        private readonly IValidator<UpdateProductCommand> _validator;
-
-        public UpdateProductHandler(ApiDbContext context, IValidator<UpdateProductCommand> validator)
-        {
-            _context = context;
-            _validator = validator;
-        }
-
         public async Task<IResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var result = _validator.Validate(request);
+            var result = validator.Validate(request);
             if (!result.IsValid)
             {
                 return Results.ValidationProblem(result.GetValidationProblems());
             }
 
-            var product = await _context.Products.FindAsync(request.ProductId);
+            var product = await context.Products.FindAsync(request.ProductId);
 
             if (product is null)
             {
@@ -61,7 +53,7 @@ public class UpdateProduct : ICarterModule
 
             product.UpdateInfo(request);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return Results.Ok();
         }

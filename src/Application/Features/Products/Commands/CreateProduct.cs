@@ -32,20 +32,12 @@ public class CreateProduct : ICarterModule
         public int CategoryId { get; set; }
     }
 
-    public class CreateProductHandler : IRequestHandler<CreateProductCommand, IResult>
+    public class CreateProductHandler(ApiDbContext context, IValidator<CreateProductCommand> validator)
+        : IRequestHandler<CreateProductCommand, IResult>
     {
-        private readonly ApiDbContext _context;
-        private readonly IValidator<CreateProductCommand> _validator;
-
-        public CreateProductHandler(ApiDbContext context, IValidator<CreateProductCommand> validator)
-        {
-            _context = context;
-            _validator = validator;
-        }
-
         public async Task<IResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var result = _validator.Validate(request);
+            var result = validator.Validate(request);
             if (!result.IsValid)
             {
                 return Results.ValidationProblem(result.GetValidationProblems());
@@ -53,9 +45,9 @@ public class CreateProduct : ICarterModule
 
             var newProduct = new Product(0, request.Name, request.Description, request.Price, request.CategoryId);
 
-            _context.Products.Add(newProduct);
+            context.Products.Add(newProduct);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return Results.Created($"api/products/{newProduct.ProductId}", null);
         }

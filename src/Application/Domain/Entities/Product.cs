@@ -3,22 +3,14 @@ using MinimalApiArchitecture.Application.Features.Products.Commands;
 
 namespace MinimalApiArchitecture.Application.Domain.Entities;
 
-public class Product : IHasDomainEvent
+public class Product(int productId, string name, string description, double price, int categoryId)
+    : IHasDomainEvent
 {
-    public Product(int productId, string name, string description, double price, int categoryId)
-    {
-        ProductId = productId;
-        Name = name;
-        Description = description;
-        Price = price;
-        CategoryId = categoryId;
-    }
-
-    public int ProductId { get; set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public double Price { get; private set; }
-    public int CategoryId { get; private set; }
+    public int ProductId { get; set; } = productId;
+    public string Name { get; private set; } = name;
+    public string Description { get; private set; } = description;
+    public double Price { get; private set; } = price;
+    public int CategoryId { get; private set; } = categoryId;
     public Category? Category { get; private set; }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();

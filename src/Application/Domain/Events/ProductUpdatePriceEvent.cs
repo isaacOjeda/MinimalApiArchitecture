@@ -2,13 +2,8 @@
 
 namespace MinimalApiArchitecture.Application.Domain.Events
 {
-    public class ProductUpdatePriceEvent : DomainEvent
+    public class ProductUpdatePriceEvent(Product product) : DomainEvent
     {
-        public ProductUpdatePriceEvent(Product product)
-        {
-            Product = product;
-        }
-
-        public Product Product { get; set; }
+        public Product Product { get; set; } = product;
     }
 }

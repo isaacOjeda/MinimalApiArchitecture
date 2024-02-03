@@ -29,19 +29,11 @@ public class GetCategories : ICarterModule
 
     }
 
-    public class GetCategoriesHandler : IRequestHandler<GetCategoriesQuery, List<GetCategoriesResponse>>
+    public class GetCategoriesHandler(ApiDbContext context, IMapper mapper)
+        : IRequestHandler<GetCategoriesQuery, List<GetCategoriesResponse>>
     {
-        private readonly ApiDbContext _context;
-        private readonly IMapper _mapper;
-
-        public GetCategoriesHandler(ApiDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         public Task<List<GetCategoriesResponse>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken) =>
-            _context.Categories.ProjectTo<GetCategoriesResponse>(_mapper.ConfigurationProvider).ToListAsync();
+            context.Categories.ProjectTo<GetCategoriesResponse>(mapper.ConfigurationProvider).ToListAsync();
     }
 
     public class GetCategoriesResponse

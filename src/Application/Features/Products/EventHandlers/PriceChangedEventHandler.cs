@@ -4,18 +4,12 @@ using MinimalApiArchitecture.Application.Domain.Events;
 
 namespace MinimalApiArchitecture.Application.Features.Products.EventHandlers
 {
-    public class PriceChangedEventHandler : INotificationHandler<ProductUpdatePriceEvent>
+    public class PriceChangedEventHandler(ILogger<PriceChangedEventHandler> logger)
+        : INotificationHandler<ProductUpdatePriceEvent>
     {
-        private readonly ILogger<PriceChangedEventHandler> _logger;
-
-        public PriceChangedEventHandler(ILogger<PriceChangedEventHandler> logger)
-        {
-            _logger = logger;
-        }
-
         public Task Handle(ProductUpdatePriceEvent notification, CancellationToken cancellationToken)
         {
-            _logger.LogWarning("Minimal APIs Domain Event: {DomainEvent}", notification.GetType().Name);
+            logger.LogWarning("Minimal APIs Domain Event: {DomainEvent}", notification.GetType().Name);
 
             return Task.CompletedTask;
         }

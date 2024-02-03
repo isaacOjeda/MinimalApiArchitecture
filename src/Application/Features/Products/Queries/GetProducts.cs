@@ -29,19 +29,11 @@ public class GetProducts : ICarterModule
 
     }
 
-    public class GetProductsHandler : IRequestHandler<GetProductsQuery, List<GetProductsResponse>>
+    public class GetProductsHandler(ApiDbContext context, IMapper mapper)
+        : IRequestHandler<GetProductsQuery, List<GetProductsResponse>>
     {
-        private readonly ApiDbContext _context;
-        private readonly IMapper _mapper;
-
-        public GetProductsHandler(ApiDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         public Task<List<GetProductsResponse>> Handle(GetProductsQuery request, CancellationToken cancellationToken) =>
-            _context.Products.ProjectTo<GetProductsResponse>(_mapper.ConfigurationProvider).ToListAsync();
+            context.Products.ProjectTo<GetProductsResponse>(mapper.ConfigurationProvider).ToListAsync();
     }
 
     public class GetProductsMappingProfile : Profile
