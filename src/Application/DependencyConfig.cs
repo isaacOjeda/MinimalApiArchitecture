@@ -15,8 +15,11 @@ public static class DependencyConfig
     {
         services.AddCarter();
         services.AddAutoMapper(typeof(Application));
-        services.AddMediatR(typeof(Application));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(typeof(Application).Assembly);
+            config.AddOpenBehavior(typeof(TransactionBehaviour<,>));
+        });
         services.AddValidatorsFromAssemblyContaining(typeof(Application));
 
         return services;
