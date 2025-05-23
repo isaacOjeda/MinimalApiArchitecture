@@ -13,8 +13,9 @@ namespace Application.Unit.Tests.Features.Products.EventHandlers
         [Test]
         public void PriceChangedEvent_LoggerCalled()
         {
-            // Arrenge
-            var domainEvent = new ProductUpdatePriceEvent(It.IsAny<Product>());
+            // Arrange
+            var product = new Product(0, "Test", "Desc", 10, 1);
+            var domainEvent = new ProductUpdatePriceEvent(product);
             var handler = new PriceChangedEventHandler(Mock.Of<ILogger<PriceChangedEventHandler>>());
 
             // Act
