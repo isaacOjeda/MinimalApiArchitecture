@@ -1,4 +1,4 @@
-﻿using Carter;
+﻿using MinimalApiArchitecture.Application.Common.Modules;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +8,7 @@ using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class DeleteProduct : ICarterModule
+public class DeleteProduct : IEndpointModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

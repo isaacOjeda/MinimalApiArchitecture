@@ -1,10 +1,10 @@
-﻿using Carter;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MinimalApiArchitecture.Application.Common.Behaviours;
+using MinimalApiArchitecture.Application.Common.Modules;
 using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application;
@@ -13,7 +13,7 @@ public static class DependencyConfig
 {
     public static IServiceCollection AddApplicationCore(this IServiceCollection services)
     {
-        services.AddCarter();
+        services.AddEndpointModules();
         services.AddAutoMapper(typeof(Application));
         services.AddMediatR(config =>
         {

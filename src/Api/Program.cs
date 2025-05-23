@@ -1,7 +1,7 @@
-using Carter;
 using MinimalApiArchitecture.Api;
 using MinimalApiArchitecture.Api.Extensions;
 using MinimalApiArchitecture.Application;
+using MinimalApiArchitecture.Application.Common.Modules;
 using MinimalApiArchitecture.Application.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,5 +17,5 @@ var app = builder.Build();
 app.UseCors(AppConstants.CorsPolicy);
 app.UseStaticFiles();
 app.MapSwagger();
-app.MapCarter();
+app.MapEndpointModules();
 app.Run();

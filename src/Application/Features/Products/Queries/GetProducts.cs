@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Carter;
+using MinimalApiArchitecture.Application.Common.Modules;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +11,7 @@ using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Queries;
 
-public class GetProducts : ICarterModule
+public class GetProducts : IEndpointModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
