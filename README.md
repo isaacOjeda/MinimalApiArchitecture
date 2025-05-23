@@ -1,16 +1,16 @@
 ﻿# Minimal API Vertical Slice Architecture
 
-This project is an experiment trying to create a solution template with Minimal APIs and Carter.
+This project is an experiment trying to create a solution template with Minimal APIs.
 
 # Technologies and patterns used
 
 - API
-  - [Minimal API with .NET 6](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0) and [Carter](https://github.com/CarterCommunity/Carter)
+  - [Minimal API with .NET 9](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-9.0)
   - [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/)
   - CQRS with [MediatR](https://github.com/jbogard/MediatR)
   - [FluentValidation](https://fluentvalidation.net/)
   - [AutoMapper](https://automapper.org/)
-  - [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)
+  - [Entity Framework Core 9](https://docs.microsoft.com/en-us/ef/core/)
   - Swagger with Code generation using [NSwag](https://github.com/RicoSuter/NSwag)
   - Logging with [Serilog](https://github.com/serilog/serilog-aspnetcore)
   - [Decorator](https://refactoring.guru/design-patterns/decorator) pattern using PipelineBehaviors
@@ -39,7 +39,7 @@ This project is an experiment trying to create a solution template with Minimal 
 
 # Getting started
 
-The easiest way to get started is using Visual Studio 2022 or installing the .NET 6 SDK with `dotnet run`.
+The easiest way to get started is using Visual Studio 2022 or installing the .NET 9 SDK with `dotnet run`.
 
 # Database Migrations
 
@@ -100,4 +100,3 @@ Inspired by:
 
 - [ContosoUniversityDotNetCore-Pages](https://github.com/jbogard/ContosoUniversityDotNetCore-Pages) by Jimmy Bogard
 - [CleanArchitecture](https://github.com/jasontaylordev/CleanArchitecture) by Jason Taylor
-- [Carter](https://github.com/CarterCommunity/Carter) by Carter Community

@@ -1,5 +1,5 @@
-﻿using Carter;
-using Carter.ModelBinding;
+﻿using MinimalApiArchitecture.Application.Common.Extensions;
+using MinimalApiArchitecture.Application.Common.Modules;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +10,7 @@ using MinimalApiArchitecture.Application.Infrastructure.Persistence;
 
 namespace MinimalApiArchitecture.Application.Features.Products.Commands;
 
-public class CreateProduct : ICarterModule
+public class CreateProduct : IEndpointModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
