@@ -13,6 +13,9 @@ public abstract class DomainEvent : INotification
     {
         DateOccurred = DateTimeOffset.UtcNow;
     }
+
     public bool IsPublished { get; set; }
-    public DateTimeOffset DateOccurred { get; protected set; } = DateTime.UtcNow;
+
+    // Using DateTimeOffset to ensure timezone information is preserved
+    public DateTimeOffset DateOccurred { get; protected set; } = DateTimeOffset.UtcNow;
 }
